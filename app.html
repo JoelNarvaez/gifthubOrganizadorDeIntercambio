@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>SwapIt - Organizar</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/css/estilos-sorteo.css">
 
 <style>
 .clip-etiqueta {
@@ -174,7 +175,7 @@ Zona drag & drop
     data-evento="Nino">
     
     <img src="imagenes/nino.jpg" alt="San Valentín" class="w-20 h-20 mb-2">
-    <span class="font-semibold">Día dek Niño</span>
+    <span class="font-semibold">Día del Niño</span>
   </button>
 
 
@@ -266,23 +267,37 @@ Zona drag & drop
 
 <!-- PASO 9 -->
 <section id="paso-9" class="hidden text-center">
-<h2 class="text-2xl font-bold mb-6">¿Qué deseas hacer?</h2>
-<div class="flex flex-col gap-4">
-<button onclick="siguiente('paso-9','paso-10')" class="bg-blue-400 text-white px-6 py-2 rounded-lg">Mostrar información</button>
-<button onclick="siguiente('paso-9','paso-11')" class="bg-pink-500 text-white px-6 py-2 rounded-lg">Sortear</button>
-</div>
+  <h2 class="text-2xl font-bold mb-6">¿Qué deseas hacer?</h2>
+  <div class="flex flex-col gap-4">
+    <button onclick="siguiente('paso-9','paso-10')" class="bg-blue-400 text-white px-6 py-2 rounded-lg">
+      Mostrar información
+    </button>
+    <button onclick="mostrarSorteo()" class="bg-pink-500 text-white px-6 py-2 rounded-lg">
+      Sortear
+    </button>
+  </div>
 </section>
 
 <!-- PASO 10 -->
 <section id="paso-10" class="hidden text-center">
-<h2 class="text-2xl font-bold mb-4">Información del intercambio</h2>
-<p>Aquí irá el resumen.</p>
+  <h2 class="text-2xl font-bold mb-4 text-center">Información del intercambio</h2>
+  <p>Aquí irá el resumen.</p>
 </section>
 
 <!-- PASO 11 -->
+<!-- PASO 11 -->
 <section id="paso-11" class="hidden text-center">
-<h2 class="text-2xl font-bold mb-4">🎉 Resultado del Sorteo</h2>
-<p>Aquí aparecerán las asignaciones.</p>
+  <h2 class="text-2xl font-bold mb-6">🎉 Resultado del Sorteo</h2>
+  <p id="ganador-info" class="text-xl mb-4">¡Los nombres están entrando a la caja!</p>
+
+  <div id="sorteo-container" class="relative w-96 h-96 mx-auto">
+    <!-- Caja cerrada -->
+    <img id="caja" class="caja absolute w-full h-full object-contain" src="imagenes/caja-regalo.png">
+    <!-- Caja abierta (invisible al inicio) -->
+    <img id="caja-abierta" src="imagenes/caja-abierta.png" class="absolute w-full h-full object-contain hidden">
+    <!-- Contenedor de participantes -->
+    <div id="participantes-container" class="absolute inset-0 overflow-hidden relative"></div>
+  </div>
 </section>
 
 </div>
@@ -318,6 +333,7 @@ function siguiente(actual, siguiente) {
   });
 </script>
 
+<script src="/js/sorteo.js"></script>
 
 </body>
 </html>

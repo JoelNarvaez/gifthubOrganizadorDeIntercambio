@@ -1,0 +1,54 @@
+#participantes-container {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+
+.participante {
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(255,255,255,0.9);
+  padding:4px 8px;
+  border-radius:8px;
+  font-weight:500;
+  top:-50px;
+  opacity:0;
+}
+
+@keyframes caer {
+  0% { top:-50px; opacity:0; }
+  80% { opacity:1; }
+  100% { top:calc(100% - 50px); opacity:0; }
+}
+
+@keyframes moverCaja {
+  0%{transform:translate(0,0);}
+  25%{transform:translate(-15px,0);}
+  50%{transform:translate(15px,0);}
+  75%{transform:translate(-10px,0);}
+  100%{transform:translate(0,0);}
+}
+
+.caja.sacudiendo {
+  animation: moverCaja 1s ease-in-out;
+}
+
+/* Confeti simple */
+.confeti-piece {
+  position:absolute;
+  width:8px;
+  height:8px;
+  background:var(--color);
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  opacity:1;
+  border-radius:50%;
+  animation: caerConfeti 2s forwards;
+}
+
+@keyframes caerConfeti {
+  0% { transform:translate(var(--x,0),0) rotate(0deg); opacity:1; }
+  100% { transform:translate(var(--x,200px),300px) rotate(360deg); opacity:0; }
+}

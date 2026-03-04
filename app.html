@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SwapIt - Organizar</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+.clip-etiqueta {
+  transition: clip-path 0.3s ease;
+}
+
+.clip-etiqueta {
+  clip-path: polygon(
+    20% 0%, 
+    80% 0%, 
+    100% 32%, 
+    100% 100%, 
+    0% 100%, 
+    0% 32%
+  );
+  border-radius: 20px;
+}
+
+@media (min-width: 1024px) {
+  .clip-etiqueta {
+    clip-path: polygon(
+      0% 0%, 
+      85% 0%, 
+      100% 25%, 
+      100% 75%, 
+      85% 100%, 
+      0% 100%
+    );
+    border-radius: 20px;
+  }
+}
+</style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-blue-100">
+<header class="bg-blue-300 text-white px-6 py-4 relative">
+
+  <div class="flex items-center justify-between">
+
+    <!-- Logo -->
+    <div class="text-2xl font-bold">
+      SwapIt
+    </div>
+
+    <!-- Botón hamburguesa (solo móvil) -->
+    <button id="menu-btn" class="md:hidden flex flex-col gap-1">
+      <span class="w-6 h-0.5 bg-white"></span>
+      <span class="w-6 h-0.5 bg-white"></span>
+      <span class="w-6 h-0.5 bg-white"></span>
+    </button>
+
+    <!-- Menú desktop -->
+    <div class="hidden md:flex items-center gap-8">
+      <ul class="flex gap-8">
+        <li>Inicio</li>
+        <li>Mis eventos</li>
+        <li>Regalos</li>
+      </ul>
+
+      <div class="flex gap-4">
+        <button class="bg-white text-blue-500 px-4 py-2 rounded-lg">
+          + Evento
+        </button>
+        <button class="border border-white px-4 py-2 rounded-lg">
+          Iniciar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Menú móvil desplegable -->
+  <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-4">
+    <ul class="space-y-2">
+      <li>Inicio</li>
+      <li>Mis eventos</li>
+      <li>Regalos</li>
+    </ul>
+
+    <div class="flex flex-col gap-2">
+      <button class="bg-white text-blue-500 px-4 py-2 rounded-lg">
+        + Evento
+      </button>
+      <button class="border border-white px-4 py-2 rounded-lg">
+        Iniciar
+      </button>
+    </div>
+  </div>
+
+</header>
+
+<main class="flex-grow flex items-center justify-center p-6">
+
+<div class="w-full max-w-md md:max-w-2xl lg:max-w-5xl relative">
+
+<!-- sombra -->
+<div class="absolute w-full h-full bg-pink-400 opacity-40 -left-2 top-2 lg:-left-6 lg:top-6 z-0 clip-etiqueta"></div>
+
+<!-- tarjeta -->
+<div class="relative z-10 clip-etiqueta bg-white">
+
+<div class="py-16 px-8 md:p-12 min-h-[550px] relative">
+
+<div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 pt-10 items-center">
+<!-- PASO 1 -->
+<section id="paso-1">
+<h2 class="text-2xl font-bold mb-4 text-center">Datos del intercambio</h2>
+<input type="text" placeholder="Nombre del evento" class="w-full p-3 mb-3 border rounded-lg">
+<button onclick="siguiente('paso-1','paso-2')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full">Continuar</button>
+</section>
+
+<!-- PASO 2 -->
+<section id="paso-2" class="hidden">
+<h2 class="text-2xl font-bold mb-4 text-center">Organizador</h2>
+<input type="text" placeholder="Nombre del organizador" class="w-full p-3 mb-3 border rounded-lg">
+<button onclick="siguiente('paso-2','paso-3')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full">Continuar</button>
+</section>
+
+<!-- PASO 3 -->
+<section id="paso-3" class="hidden">
+<h2 class="text-2xl font-bold mb-4 text-center">Registrar participantes</h2>
+<textarea placeholder="Escribe los nombres separados por coma" class="w-full p-3 mb-3 border rounded-lg"></textarea>
+<button onclick="siguiente('paso-3','paso-4')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full">Continuar</button>
+</section>
+
+<!-- PASO 4 -->
+<section id="paso-4" class="hidden text-center">
+<h2 class="text-2xl font-bold mb-6">¿Habrá exclusiones?</h2>
+<div class="flex gap-4 justify-center">
+<button onclick="siguiente('paso-4','paso-5')" class="bg-blue-400 text-white px-6 py-2 rounded-lg">Sí</button>
+<button onclick="siguiente('paso-4','paso-6')" class="bg-gray-400 text-white px-6 py-2 rounded-lg">No</button>
+</div>
+</section>
+
+<!-- PASO 5 -->
+<section id="paso-5" class="hidden">
+<h2 class="text-2xl font-bold mb-4 text-center">Configurar exclusiones</h2>
+<div class="border-dashed border-2 border-pink-300 p-6 rounded-lg text-center">
+Zona drag & drop
+</div>
+<button onclick="siguiente('paso-5','paso-6')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full mt-6">Continuar</button>
+</section>
+
+<!-- PASO 6 -->
+<section id="paso-6" class="hidden">
+
+<h2 class="text-2xl font-bold mb-4 text-center">Tipo de sorteo</h2>
+
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+   <button 
+    class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-evento="Navidad">
+    
+    <img src="imagenes/arbol.png" alt="Navidad" class="w-20 h-20 mb-2">
+    <span class="font-semibold">Navidad</span>
+  </button>
+
+  <button 
+    class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-evento="San Valentin">
+    
+    <img src="imagenes/valentin.png" alt="San Valentín" class="w-20 h-20 mb-2">
+    <span class="font-semibold">San Valentín</span>
+  </button>
+
+    <button 
+    class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-evento="Nino">
+    
+    <img src="imagenes/nino.jpg" alt="San Valentín" class="w-20 h-20 mb-2">
+    <span class="font-semibold">Día dek Niño</span>
+  </button>
+
+
+    <button 
+    class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-evento="Madre">
+    
+    <img src="imagenes/madre.png" alt="Día de las Madres" class="w-20 h-20 mb-2">
+    <span class="font-semibold">Día de las Madres</span>
+  </button>
+
+
+    <button 
+    class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-evento="Halloween">
+    
+    <img src="imagenes/ha.jpg" alt="Halloween" class="w-20 h-20 mb-2">
+    <span class="font-semibold">Halloween</span>
+  </button>
+  <input 
+    type="text" 
+    id="eventoPersonalizado"
+    placeholder="Escribe tu evento..."
+    class="border p-2 rounded-xl w-full">
+</div>
+<button onclick="siguiente('paso-6','paso-7')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full mt-2">Continuar</button>
+</section>
+
+<!-- PASO 7 -->
+<section id="paso-7" class="hidden">
+<h2 class="text-2xl font-bold mb-4 text-center">Fecha</h2>
+<input type="date" class="w-full p-3 mb-3 border rounded-lg">
+<button onclick="siguiente('paso-7','paso-8')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full">Continuar</button>
+</section>
+
+<!-- PASO 8 -->
+<section id="paso-8" class="hidden">
+<h2 class="text-2xl font-bold mb-4 text-center">Presupuesto</h2>
+  <div class="grid grid-cols-2 md:grid-cols-2 gap-6">
+   <button 
+    class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-presupuesto="20">
+    
+    <img src="imagenes/billete20.jpg" alt="$20" class="w-200 h-130 mb-2">
+    <span class="font-semibold">$20</span>
+  </button>
+
+     <button 
+    class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-presupuesto="50">
+    
+    <img src="imagenes/billete50.jpg" alt="$50" class="w-200 h-130 mb-2">
+    <span class="font-semibold">$50</span>
+  </button>
+
+     <button 
+    class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-presupuesto="100">
+    
+    <img src="imagenes/billete100.jpg" alt="$100" class="w-200 h-130 mb-2">
+    <span class="font-semibold">$100</span>
+  </button>
+
+     <button 
+    class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-presupuesto="200">
+    
+    <img src="imagenes/billete200.png" alt="$200" class="w-200 h-130 mb-2">
+    <span class="font-semibold">$200</span>
+  </button>
+
+     <button 
+    class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+    data-presupuesto="500">
+    
+    <img src="imagenes/billete500.png" alt="$500" class="w-200 h-130 mb-2">
+    <span class="font-semibold">$500</span>
+  </button>
+
+</div>
+
+<input 
+  type="number"
+  id="presupuestoPersonalizado"
+  placeholder="Otro monto..."
+  class="mt-4 border p-2 rounded-xl w-sm mx-auto">
+<button onclick="siguiente('paso-8','paso-9')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full mt-4">Continuar</button>
+</section>
+
+<!-- PASO 9 -->
+<section id="paso-9" class="hidden text-center">
+<h2 class="text-2xl font-bold mb-6">¿Qué deseas hacer?</h2>
+<div class="flex flex-col gap-4">
+<button onclick="siguiente('paso-9','paso-10')" class="bg-blue-400 text-white px-6 py-2 rounded-lg">Mostrar información</button>
+<button onclick="siguiente('paso-9','paso-11')" class="bg-pink-500 text-white px-6 py-2 rounded-lg">Sortear</button>
+</div>
+</section>
+
+<!-- PASO 10 -->
+<section id="paso-10" class="hidden text-center">
+<h2 class="text-2xl font-bold mb-4">Información del intercambio</h2>
+<p>Aquí irá el resumen.</p>
+</section>
+
+<!-- PASO 11 -->
+<section id="paso-11" class="hidden text-center">
+<h2 class="text-2xl font-bold mb-4">🎉 Resultado del Sorteo</h2>
+<p>Aquí aparecerán las asignaciones.</p>
+</section>
+
+</div>
+
+<!--  AGUJERO  -->
+<div class="absolute top-2 left-1/2 -translate-x-1/2 
+            lg:top-1/2 lg:right-16 lg:left-auto lg:-translate-y-1/2">
+  <div class="w-12 h-12 lg:w-24 lg:h-24 border-4 border-pink-300 rounded-full bg-blue-100"></div>
+</div>
+
+</div>
+</div>
+</div>
+</main>
+
+<footer class="bg-yellow-100 text-center p-3 mt-4">
+© 2026 SwapIt
+</footer>
+
+<script>
+function siguiente(actual, siguiente) {
+  document.getElementById(actual).classList.add("hidden");
+  document.getElementById(siguiente).classList.remove("hidden");
+}
+</script>
+
+<script>
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("mobile-menu");
+
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
+
+
+</body>
+</html>

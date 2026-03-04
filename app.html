@@ -109,8 +109,34 @@
 <div class="py-16 px-8 md:p-12 min-h-[550px] relative">
 
 <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 pt-10 items-center">
-<!-- PASO 1 -->
-<section id="paso-1">
+
+<!-- PASO 0 - Inicio -->
+<section id="paso-0" class="flex flex-col justify-center items-center text-center px-6">
+  <img src="/imagenes/Logo_PC.png" 
+       alt="logo" 
+       class="w-55 md:w-70 drop-shadow-lg">
+
+  <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800">
+      Organiza tu intercambio
+  </h2>
+
+  <p class="text-gray-600 max-w-md">
+      Crea tu evento, agrega participantes y realiza el sorteo 
+      de forma rápida, divertida y segura.
+  </p>
+
+  <button 
+      onclick="siguiente('paso-0','paso-1')" 
+      class="mt-4 bg-pink-500 hover:bg-pink-600 
+             text-white px-10 py-4 rounded-2xl 
+             text-lg font-semibold shadow-xl 
+             hover:scale-105 transition duration-300">
+      Comenzar 🎁
+  </button>
+</section>
+
+  <!-- PASO 1 -->
+<section id="paso-1" class="hidden">
 <h2 class="text-2xl font-bold mb-4 text-center">Datos del intercambio</h2>
 <input type="text" placeholder="Nombre del evento" class="w-full p-3 mb-3 border rounded-lg">
 <button onclick="siguiente('paso-1','paso-2')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full">Continuar</button>
@@ -118,33 +144,197 @@
 
 <!-- PASO 2 -->
 <section id="paso-2" class="hidden">
-<h2 class="text-2xl font-bold mb-4 text-center">Organizador</h2>
-<input type="text" placeholder="Nombre del organizador" class="w-full p-3 mb-3 border rounded-lg">
-<button onclick="siguiente('paso-2','paso-3')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full">Continuar</button>
+    <!-- card -->
+    <div class="relative w-[420px] backdrop-blur-xl bg-white/20  p-8">
+
+        <!-- titulo -->
+        <h2 class="text-center text-2xl font-bold text-black mb-6">
+            ¿Cuál es tu nombre?
+        </h2>
+
+        <!-- input -->
+        <div class="relative mb-5">
+            <input id="nombre-organizador" type="text" placeholder="Tu nombre"
+                class="w-full rounded-xl px-12 py-3 text-gray-700 bg-white/90 focus:outline-none focus:ring-4 focus:ring-purple-300" />
+
+            <!-- icono -->
+            <span class="absolute left-4 top-3 text-gray-400">
+                👤
+            </span>
+
+            <!-- clear -->
+            <span class="absolute right-4 top-3 text-gray-400 cursor-pointer">
+                ✕
+            </span>
+        </div>
+
+        <!-- checkbox -->
+        <label class="flex items-center gap-3 text-black mb-6 cursor-pointer">
+            <input type="checkbox" id="incluirOrganizador" checked class="w-5 h-5 accent-pink-500">
+            Inclúyeme (el organizador) en el sorteo
+        </label>
+
+        <!-- boton -->
+        <button onclick="siguiente('paso-2','paso-3')" class="w-full py-3 rounded-full text-lg font-semibold text-white
+        bg-gradient-to-r bg-pink-500
+        hover:scale-[1.02] transition
+        shadow-lg flex items-center justify-center gap-2">
+
+            Continuar
+            ➜
+        </button>
+
+    </div>
+
 </section>
 
 <!-- PASO 3 -->
 <section id="paso-3" class="hidden">
-<h2 class="text-2xl font-bold mb-4 text-center">Registrar participantes</h2>
-<textarea placeholder="Escribe los nombres separados por coma" class="w-full p-3 mb-3 border rounded-lg"></textarea>
-<button onclick="siguiente('paso-3','paso-4')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full">Continuar</button>
+<div class="w-[420px] backdrop-blur-xl bg-white/20 p-8">
+
+        <!-- contenido -->
+        <div class="p-6 space-y-4">
+
+            <h2 class="text-center text-2xl font-bold text-black">
+                Registra los participantes
+            </h2>
+
+            <!-- lista -->
+            <div id="lista-participantes" class="space-y-3 max-h-56 overflow-y-auto pr-2">
+
+                <!-- organizador -->
+                <div id="organizador-item" class="flex items-center rounded-xl px-4 py-2">
+                  <input id="organizador-nombre" type="text" class="w-full bg-transparent outline-none" />
+                  <span id="organizador-estado"></span>
+                </div>
+                <!-- input nuevo -->
+                <input type="text" id="nuevo-participante" placeholder="Añadir participante" class="w-full bg-gray-100 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+            </div>
+
+            <!-- botón añadir -->
+            <button id="btn-agregar" class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-2xl text-indigo-300 hover:bg-gray-200">
+              +
+            </button>
+
+            <!-- navegación -->
+            <div class="flex items-center justify-between pt-1">
+
+                <button onclick="siguiente('paso-3','paso-2')" class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-xl text-indigo-300 hover:bg-gray-200">
+                    ←
+                </button>
+
+                <button
+                    onclick="siguiente('paso-3','paso-4')" class="flex-1 shadow-lg ml-4 bg-gradient-to-r bg-pink-500 text-white py-2 rounded-xl font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] transition">
+                    Continuar →
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 <!-- PASO 4 -->
 <section id="paso-4" class="hidden text-center">
-<h2 class="text-2xl font-bold mb-6">¿Habrá exclusiones?</h2>
-<div class="flex gap-4 justify-center">
-<button onclick="siguiente('paso-4','paso-5')" class="bg-blue-400 text-white px-6 py-2 rounded-lg">Sí</button>
-<button onclick="siguiente('paso-4','paso-6')" class="bg-gray-400 text-white px-6 py-2 rounded-lg">No</button>
-</div>
+<div class="backdrop-blur-xl bg-white/20 p-8 w-[420px]">
+
+        <!-- titulo -->
+        <h2 class="text-xl font-semibold text-black mb-2">
+            ¿Quieres excluir ciertos sorteos?
+        </h2>
+
+        <!-- descripcion -->
+        <p class="text-gray-500 mb-6">
+            Usa exclusiones para evitar que ciertas personas saquen nombres específicos.
+        </p>
+
+        <!-- botones opciones -->
+        <div class="space-y-3">
+
+            <button onclick="siguiente('paso-4','paso-6')" class="w-full bg-gray-100 hover:bg-gray-200 text-pink-500 font-medium py-3 rounded-xl transition">
+                No establecer exclusiones
+            </button>
+
+            <button onclick="siguiente('paso-4','paso-5')" class="w-full bg-gray-100 hover:bg-gray-200 text-pink-500 font-medium py-3 rounded-xl transition">
+                Establecer exclusiones
+            </button>
+
+        </div>
+
+        <!-- separador -->
+        <div class="my-6 border-t border-gray-200"></div>
+
+        <!-- navegación -->
+        <div class="flex items-center gap-3">
+
+            <button
+                onclick="siguiente('paso-4','paso-3')" class="w-12 h-12 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center justify-center text-xl text-indigo-300">
+                ←
+            </button>
+
+            <button
+                onclick="siguiente('paso-4','paso-6')" class="flex-1 shadow-lg ml-4 bg-gradient-to-r bg-pink-500 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:scale-[1.02] transition">
+                Continuar →
+            </button>
+
+        </div>
+
+    </div>
+
 </section>
 
 <!-- PASO 5 -->
 <section id="paso-5" class="hidden">
 <h2 class="text-2xl font-bold mb-4 text-center">Configurar exclusiones</h2>
-<div class="border-dashed border-2 border-pink-300 p-6 rounded-lg text-center">
-Zona drag & drop
+<div id="lista-exclusiones"></div>
+
+<div id="modal-exclusiones" 
+     class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+
+  <div class="bg-white w-[400px] max-h-[500px] rounded-2xl shadow-2xl p-6 relative flex flex-col">
+
+    <!-- Botón cerrar -->
+    <button onclick="cerrarModal()" 
+            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">
+      ✕
+    </button>
+
+    <h3 id="titulo-modal" class="text-xl font-bold text-center mb-4 text-pink-600"></h3>
+
+    <!-- Lista arrastrable -->
+    <div id="lista-arrastrable" 
+         class="flex flex-col gap-2 mb-4 overflow-y-auto max-h-48">
+    </div>
+
+    <!-- Zona basura -->
+    <div id="zona-exclusion"
+         class="border-2 border-dashed border-pink-400 rounded-xl p-4 text-center text-pink-500 font-semibold transition-all">
+      🗑 Arrastra aquí para excluir
+    </div>
+
+    <!-- Exclusiones actuales -->
+    <div id="exclusiones-actuales" 
+         class="mt-4 text-sm text-gray-600 max-h-20 overflow-y-auto">
+    </div>
+
+    <!-- Botones -->
+    <div class="flex gap-3 mt-4">
+      <button onclick="cerrarModal()" 
+              class="w-1/2 bg-gray-200 py-2 rounded-lg hover:bg-gray-300 transition">
+        Cancelar
+      </button>
+      <button onclick="cerrarModal()" 
+              class="w-1/2 bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 transition">
+        Guardar
+      </button>
+    </div>
+
+  </div>
 </div>
+
 <button onclick="siguiente('paso-5','paso-6')" class="bg-pink-500 text-white px-6 py-2 rounded-lg w-full mt-6">Continuar</button>
 </section>
 
@@ -316,11 +506,16 @@ Zona drag & drop
 <footer class="bg-yellow-100 text-center p-3 mt-4">
 © 2026 SwapIt
 </footer>
-
+<script src="./js/script.js"></script>
 <script>
 function siguiente(actual, siguiente) {
   document.getElementById(actual).classList.add("hidden");
   document.getElementById(siguiente).classList.remove("hidden");
+
+  if (siguiente === "paso-5") {
+    renderizarPaso5();
+  }
+
 }
 </script>
 

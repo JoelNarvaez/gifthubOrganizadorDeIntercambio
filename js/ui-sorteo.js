@@ -39,7 +39,7 @@ function animarSorteo(resultado) {
   // ── Fase 2: Sacudir la caja 
   setTimeout(() => {
     cajaCerrada.classList.add("sacudiendo");
-    ganadorInfo.textContent = "🎲 Mezclando...";
+    ganadorInfo.textContent = "Mezclando...";
   }, tiempoCaida);
 
   // ── Fase 3: Abrir la caja y mostrar resultados 
@@ -54,7 +54,7 @@ function animarSorteo(resultado) {
 
 // ── Mostrar tabla de resultados 
 function mostrarResultados(resultado) {
-  ganadorInfo.textContent = "🎉 ¡El sorteo está listo!";
+  ganadorInfo.textContent = "¡El sorteo está listo!";
 
   // Limpiar contenedor
   sorteoContenedor.innerHTML = "";

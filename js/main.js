@@ -118,13 +118,14 @@ function mostrarSorteo() {
   animarSorteo(resultado);
 }
 
-// ── Resumen ──────────────────────────────────────────────────
 function mostrarResumen() {
-  const id     = leerEventoActivo();
+
+  const id = leerEventoActivo();
   const evento = leerEventoPorId(id);
+
   if (!evento) {
     document.getElementById("paso-10").innerHTML =
-      `<p style="color:#ef4444;font-size:0.9rem;">No se encontró información del evento.</p>`;
+      `<p class="text-red-500 text-sm">No se encontró información del evento.</p>`;
     return;
   }
 
@@ -132,134 +133,169 @@ function mostrarResumen() {
     evento.imagenEvento = evento.imagenEvento.replace(/[\s\n\r]/g, "");
   }
 
-  const participantes   = evento.participantes  || [];
-  const exclusiones     = evento.exclusiones    || {};
+  const participantes = evento.participantes || [];
+  const exclusiones = evento.exclusiones || {};
   const resultadoSorteo = evento.resultadoSorteo || null;
 
   const iconoPorTipo = t => {
     if (!t) return "🎁";
-    if (t.includes("Navidad"))   return "🎄";
-    if (t.includes("Valentin"))  return "💝";
-    if (t.includes("Nino"))      return "🧸";
-    if (t.includes("Madres"))    return "💐";
+    if (t.includes("Navidad")) return "🎄";
+    if (t.includes("Valentin")) return "💝";
+    if (t.includes("Nino")) return "🧸";
+    if (t.includes("Madres")) return "💐";
     if (t.includes("Halloween")) return "🎃";
     return "🎉";
   };
 
   const chipsHTML = participantes.length
     ? participantes.map(p => `
-        <span style="display:inline-flex;align-items:center;gap:5px;
-          padding:4px 12px;border-radius:50px;font-size:0.78rem;font-weight:500;
-          background:#fdf2f8;color:#be185d;border:1px solid #fbcfe8;">👤 ${p}</span>`).join("")
-    : `<span style="color:#9ca3af;font-size:0.82rem;font-style:italic;">Sin participantes</span>`;
+        <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full bg-pink-50 text-pink-700 border border-pink-200">
+          👤 ${p}
+        </span>
+      `).join("")
+    : `<span class="text-gray-400 text-sm italic">Sin participantes</span>`;
 
   const exclEntries = Object.entries(exclusiones).filter(([, v]) => v.length > 0);
+
   const exclHTML = exclEntries.length
     ? exclEntries.map(([persona, ex]) => `
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-          padding:7px 12px;background:#fdf2f8;border-radius:10px;font-size:0.8rem;">
-          <span style="font-weight:600;color:#374151;">${persona}</span>
-          <span style="color:#d1d5db;font-size:0.7rem;">no sortea a</span>
-          ${ex.map(e => `<span style="padding:2px 8px;border-radius:50px;font-size:0.75rem;
-            background:#fee2e2;color:#dc2626;font-weight:500;">${e}</span>`).join("")}
-        </div>`).join("")
-    : `<p style="color:#9ca3af;font-size:0.82rem;font-style:italic;padding:6px 0;">Sin restricciones configuradas</p>`;
+      <div class="flex items-center flex-wrap gap-2 p-2 bg-pink-50 rounded-lg text-sm">
+        <span class="font-semibold text-gray-700">${persona}</span>
+        <span class="text-gray-400 text-xs">no sortea a</span>
+        ${ex.map(e => `
+          <span class="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-600 font-medium">
+            ${e}
+          </span>`).join("")}
+      </div>
+    `).join("")
+    : `<p class="text-gray-400 text-sm italic">Sin restricciones configuradas</p>`;
 
   const sorteoHTML = resultadoSorteo && Object.keys(resultadoSorteo).length
-    ? `<div style="display:flex;flex-direction:column;gap:6px;">
-        ${Object.entries(resultadoSorteo).map(([d, r], i) => `
-          <div style="display:flex;align-items:center;justify-content:space-between;
-            padding:9px 14px;border-radius:12px;
-            background:${i%2===0?'#fdf2f8':'#fff'};border:1px solid #fbcfe8;">
-            <span style="font-size:0.85rem;font-weight:600;color:#374151;">${d}</span>
+    ? `
+      <div class="flex flex-col gap-2">
+        ${Object.entries(resultadoSorteo).map(([d, r]) => `
+          <div class="flex items-center justify-between px-4 py-2 rounded-lg border border-pink-200 bg-pink-50">
+            <span class="font-medium text-gray-700">${d}</span>
             <span>🎁</span>
-            <span style="font-size:0.85rem;font-weight:700;color:#db2777;">${r}</span>
-          </div>`).join("")}
-      </div>`
-    : `<div style="text-align:center;padding:16px;border-radius:12px;
-        background:#f9fafb;border:1.5px dashed #e5e7eb;
-        color:#9ca3af;font-size:0.82rem;font-style:italic;">
-        El sorteo aún no se ha realizado</div>`;
+            <span class="font-semibold text-pink-600">${r}</span>
+          </div>
+        `).join("")}
+      </div>
+    `
+    : `
+      <div class="text-center p-4 border border-dashed border-gray-200 rounded-lg text-gray-400 text-sm italic">
+        El sorteo aún no se ha realizado
+      </div>
+    `;
 
   const iconoHtml = evento.imagenEvento
-    ? `<img src="${evento.imagenEvento}" alt="evento"
-            style="width:52px;height:52px;border-radius:14px;object-fit:cover;flex-shrink:0;display:block;">`
-    : `<div style="width:52px;height:52px;border-radius:14px;
-          background:rgba(255,255,255,0.25);display:flex;align-items:center;
-          justify-content:center;font-size:1.6rem;flex-shrink:0;">
-          ${iconoPorTipo(evento.tipoEvento)}</div>`;
+    ? `<img src="${evento.imagenEvento}" class="w-14 h-14 rounded-xl object-cover" alt="evento">`
+    : `
+      <div class="w-14 h-14 rounded-xl bg-white/30 flex items-center justify-center text-2xl">
+        ${iconoPorTipo(evento.tipoEvento)}
+      </div>
+    `;
 
   document.getElementById("paso-10").innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:0;width:100%;overflow-y:auto;max-height:480px;padding-right:2px;">
+  
+  <div class="w-full max-w-2xl mx-auto flex flex-col gap-5 max-h-[520px] overflow-y-auto">
 
-      <div style="background:linear-gradient(135deg,#ec4899 0%,#f9a8d4 100%);
-          border-radius:16px;padding:20px 20px 16px;margin-bottom:14px;
-          position:relative;overflow:hidden;">
-        <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;
-            border-radius:50%;background:rgba(255,255,255,0.12);"></div>
-        <div style="position:absolute;bottom:-30px;right:30px;width:70px;height:70px;
-            border-radius:50%;background:rgba(255,255,255,0.08);"></div>
+    <!-- Header evento -->
+    <div class="relative p-5 rounded-2xl bg-gradient-to-r from-pink-500 to-pink-300 text-white shadow-md">
+      
+      <div class="flex items-center gap-4">
+        ${iconoHtml}
 
-        <div style="display:flex;align-items:flex-start;gap:14px;position:relative;z-index:1;">
-          ${iconoHtml}
-          <div style="min-width:0;">
-            <p style="font-family:'Fredoka',sans-serif;font-size:1.3rem;font-weight:700;
-                color:white;line-height:1.2;margin-bottom:4px;">
-              ${evento.nombreEvento || "Sin nombre"}</p>
-            <p style="font-size:0.78rem;color:rgba(255,255,255,0.8);">
-              ${evento.tipoEvento || "Evento personalizado"}</p>
+        <div>
+          <h2 class="text-xl font-bold leading-tight">
+            ${evento.nombreEvento || "Sin nombre"}
+          </h2>
+          <p class="text-sm text-white/80">
+            ${evento.tipoEvento || "Evento personalizado"}
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 mt-4">
+
+        <div class="bg-white/20 rounded-lg p-2 text-center">
+          <div class="text-lg">👤</div>
+          <div class="text-xs text-white/80">Organizador</div>
+          <div class="text-sm font-semibold break-words">
+            ${evento.organizador || "—"}
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;">
-          ${[
-            {label:"Organizador", val:evento.organizador||"—",       icon:"👤"},
-            {label:"Fecha",       val:evento.fecha||"—",             icon:"📅"},
-            {label:"Presupuesto", val:evento.presupuesto?"$"+evento.presupuesto:"—", icon:"💰"}
-          ].map(s=>`
-            <div style="background:rgba(255,255,255,0.2);border-radius:10px;
-                padding:8px 10px;text-align:center;">
-              <div style="font-size:1rem;margin-bottom:2px;">${s.icon}</div>
-              <div style="font-size:0.72rem;color:rgba(255,255,255,0.75);margin-bottom:1px;">${s.label}</div>
-              <div style="font-size:0.78rem;font-weight:700;color:white;
-                  word-break:break-word;line-height:1.2;">${s.val}</div>
-            </div>`).join("")}
+        <div class="bg-white/20 rounded-lg p-2 text-center">
+          <div class="text-lg">📅</div>
+          <div class="text-xs text-white/80">Fecha</div>
+          <div class="text-sm font-semibold">
+            ${evento.fecha || "—"}
+          </div>
         </div>
-      </div>
 
-      <div style="background:white;border:1.5px solid #fce7f3;border-radius:14px;
-          padding:14px 16px;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <p style="font-family:'Fredoka',sans-serif;font-size:1rem;font-weight:600;color:#374151;">
-            👥 Participantes</p>
-          <span style="padding:2px 10px;border-radius:50px;font-size:0.72rem;font-weight:700;
-              background:#fce7f3;color:#db2777;">${participantes.length}</span>
+        <div class="bg-white/20 rounded-lg p-2 text-center">
+          <div class="text-lg">💰</div>
+          <div class="text-xs text-white/80">Presupuesto</div>
+          <div class="text-sm font-semibold">
+            ${evento.presupuesto ? "$" + evento.presupuesto : "—"}
+          </div>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">${chipsHTML}</div>
+
       </div>
 
-      <div style="background:white;border:1.5px solid #fce7f3;border-radius:14px;
-          padding:14px 16px;margin-bottom:10px;">
-        <p style="font-family:'Fredoka',sans-serif;font-size:1rem;font-weight:600;
-            color:#374151;margin-bottom:10px;">🚫 Restricciones</p>
-        <div style="display:flex;flex-direction:column;gap:6px;">${exclHTML}</div>
-      </div>
-
-      <div style="background:white;border:1.5px solid #fce7f3;border-radius:14px;
-          padding:14px 16px;margin-bottom:14px;">
-        <p style="font-family:'Fredoka',sans-serif;font-size:1rem;font-weight:600;
-            color:#374151;margin-bottom:10px;">🎲 Resultado del sorteo</p>
-        ${sorteoHTML}
-      </div>
-
-      <button onclick="siguiente('paso-10','paso-9')" class="btn-continuar"
-              style="width:100%;padding:12px;border-radius:14px;border:none;
-                background:linear-gradient(135deg,#ec4899,#f9a8d4);
-                color:white;font-family:'DM Sans',sans-serif;
-                font-size:0.9rem;font-weight:600;cursor:pointer;">
-        ← Volver
-      </button>
     </div>
+
+    <!-- Participantes -->
+    <div class="bg-white border border-pink-100 rounded-xl p-4 shadow-sm">
+      
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-semibold text-gray-700 flex items-center gap-2">
+          👥 Participantes
+        </h3>
+
+        <span class="text-xs font-bold bg-pink-100 text-pink-600 px-3 py-1 rounded-full">
+          ${participantes.length}
+        </span>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        ${chipsHTML}
+      </div>
+
+    </div>
+
+    <!-- Restricciones -->
+    <div class="bg-white border border-pink-100 rounded-xl p-4 shadow-sm">
+
+      <h3 class="font-semibold text-gray-700 mb-3">
+        Restricciones
+      </h3>
+
+      <div class="flex flex-col gap-2">
+        ${exclHTML}
+      </div>
+
+    </div>
+
+    <!-- Resultado sorteo -->
+    <div class="bg-white border border-pink-100 rounded-xl p-4 shadow-sm">
+
+      <h3 class="font-semibold text-gray-700 mb-3">
+        Resultado del sorteo
+      </h3>
+
+      ${sorteoHTML}
+
+    </div>
+
+    <button
+      onclick="siguiente('paso-10','paso-9')"
+      class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-pink-300 text-white font-semibold hover:opacity-90 transition">
+      ← Volver
+    </button>
+
+  </div>
   `;
 }
 

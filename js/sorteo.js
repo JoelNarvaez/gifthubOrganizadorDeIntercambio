@@ -1,13 +1,4 @@
 
-// ── Algoritmo principal 
-// Recibe:
-//   participantes : ["Ana", "Luis", "Gina", "Lalo"]
-//   exclusiones   : { "Gina": ["Angelica"], "Ana": ["Luis"] }
-//
-// Devuelve:
-//   { "Ana": "Lalo", "Luis": "Gina", "Gina": "Luis", "Lalo": "Ana" }
-//   o null si no fue posible encontrar una solución válida
-
 function realizarSorteo(participantes, exclusiones) {
   const MAX_INTENTOS = 200;
 

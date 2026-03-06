@@ -109,7 +109,7 @@ input[type="number"]:focus {
 <header class="bg-blue-300 text-white px-6 py-4 relative">
   <div class="flex items-center justify-between">
 
-    <div class="logo-swapit">SwapIt 🎁</div>
+    <div class="logo-swapit">SwapIt </div>
 
     <!-- Botón hamburguesa (solo móvil) -->
     <button id="menu-btn" class="md:hidden flex flex-col gap-1">
@@ -121,19 +121,14 @@ input[type="number"]:focus {
     <!-- Menú desktop -->
     <div class="hidden md:flex items-center gap-8">
       <ul class="flex gap-8">
-        <li class="cursor-pointer hover:text-blue-100 transition">Inicio</li>
         <li class="cursor-pointer hover:text-blue-100 transition"
             onclick="abrirDrawer()">Mis eventos</li>
-        <li class="cursor-pointer hover:text-blue-100 transition">Regalos</li>
       </ul>
       <div class="flex gap-4">
         <button onclick="nuevoEvento()"
                 class="bg-white text-blue-500 px-4 py-2 rounded-lg font-medium
                        hover:bg-blue-50 transition hover:-translate-y-0.5 hover:shadow-md">
           + Evento
-        </button>
-        <button class="border border-white px-4 py-2 rounded-lg hover:bg-white/10 transition">
-          Iniciar
         </button>
       </div>
     </div>
@@ -142,17 +137,14 @@ input[type="number"]:focus {
   <!-- Menú móvil -->
   <div id="mobile-menu" class="hidden mt-4 space-y-4 border-t border-white/20 pt-4">
     <ul class="space-y-2">
-      <li class="cursor-pointer hover:text-blue-100 transition">Inicio</li>
       <li class="cursor-pointer hover:text-blue-100 transition"
           onclick="cerrarMenuMovil(); abrirDrawer();">Mis eventos</li>
-      <li class="cursor-pointer hover:text-blue-100 transition">Regalos</li>
     </ul>
     <div class="flex flex-col gap-2">
       <button onclick="nuevoEvento()"
               class="bg-white text-blue-500 px-4 py-2 rounded-lg font-medium">
         + Evento
       </button>
-      <button class="border border-white px-4 py-2 rounded-lg">Iniciar</button>
     </div>
   </div>
 </header>
@@ -188,7 +180,7 @@ input[type="number"]:focus {
       <button id="btn-comenzar"
               class="btn-continuar mt-2 bg-pink-500 hover:bg-pink-600
                      text-white px-10 py-4 rounded-2xl text-lg font-semibold shadow-xl">
-        Comenzar ✨
+        Comenzar
       </button>
     </section>
 
@@ -357,7 +349,7 @@ input[type="number"]:focus {
           <div id="zona-exclusion"
                class="border-2 border-dashed border-pink-300 rounded-xl p-4
                       text-center text-pink-500 font-semibold">
-            🗑 Arrastra aquí para excluir
+            Arrastra aquí para excluir
           </div>
 
           <div id="exclusiones-actuales"
@@ -574,13 +566,13 @@ input[type="number"]:focus {
                 class="btn-continuar bg-blue-400 hover:bg-blue-500 text-white
                        px-6 py-4 rounded-2xl font-semibold flex items-center
                        justify-center gap-3 text-lg">
-          📋 Ver información
+          Ver información
         </button>
         <button onclick="mostrarSorteo()"
                 class="btn-continuar bg-pink-500 hover:bg-pink-600 text-white
                        px-6 py-4 rounded-2xl font-semibold flex items-center
                        justify-center gap-3 text-lg">
-          🎲 ¡Hacer el sorteo!
+          ¡Hacer el sorteo!
         </button>
         <button onclick="siguiente('paso-9','paso-8')"
                 class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
@@ -649,7 +641,7 @@ input[type="number"]:focus {
   <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-pink-50">
     <div>
       <h3 class="text-lg font-bold text-gray-800" style="font-family:'Fredoka',sans-serif;">
-        🎁 Mis Eventos
+        Mis Eventos
       </h3>
       <p id="drawer-count" class="text-xs text-gray-400 mt-0.5"></p>
     </div>
@@ -678,7 +670,7 @@ input[type="number"]:focus {
 
 <!-- ══ FOOTER ══════════════════════════════════════════════ -->
 <footer class="bg-yellow-100 text-center p-3 mt-4 text-sm text-gray-500">
-  🎁 © 2026 SwapIt
+  © 2026 SwapIt
 </footer>
 
 <!-- ══ SCRIPTS ════════════════════════════════════════════ -->

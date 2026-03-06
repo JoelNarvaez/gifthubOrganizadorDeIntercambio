@@ -1,28 +1,24 @@
-// ============================================================
-//  ui-sorteo.js  —  Animación visual del sorteo
-//  Solo maneja el DOM de la animación, lee el resultado de sorteo.js
-// ============================================================
 
-// ── Referencias al DOM ───────────────────────────────────────
+// ── Referencias al DOM 
 const cajaCerrada   = document.getElementById("caja");
 const cajaAbierta   = document.getElementById("caja-abierta");
 const ganadorInfo   = document.getElementById("ganador-info");
 const sorteoContenedor = document.getElementById("participantes-container");
 
-// ── Animación principal ──────────────────────────────────────
+// ── Animación principal 
 // Se llama desde main.js cuando el usuario da click en "Sortear"
 function animarSorteo(resultado) {
   if (!resultado) return;
 
   const participantes = Object.keys(resultado);
 
-  // ── Resetear estado visual ───────────────────────────────
+  // ── Resetear estado visual 
   sorteoContenedor.innerHTML  = "";
   cajaCerrada.classList.remove("hidden", "sacudiendo");
   cajaAbierta.classList.add("hidden");
   ganadorInfo.textContent     = "¡Los nombres están entrando a la caja!";
 
-  // ── Fase 1: Nombres cayendo hacia la caja ────────────────
+  // ── Fase 1: Nombres cayendo hacia la caja 
   participantes.forEach((nombre, index) => {
     const div       = document.createElement("div");
     div.className   = "participante absolute text-sm font-bold text-pink-600 bg-white px-2 py-1 rounded shadow";
@@ -40,13 +36,13 @@ function animarSorteo(resultado) {
 
   const tiempoCaida = participantes.length * 300 + 1200;
 
-  // ── Fase 2: Sacudir la caja ──────────────────────────────
+  // ── Fase 2: Sacudir la caja 
   setTimeout(() => {
     cajaCerrada.classList.add("sacudiendo");
     ganadorInfo.textContent = "🎲 Mezclando...";
   }, tiempoCaida);
 
-  // ── Fase 3: Abrir la caja y mostrar resultados ───────────
+  // ── Fase 3: Abrir la caja y mostrar resultados 
   setTimeout(() => {
     cajaCerrada.classList.add("hidden");
     cajaAbierta.classList.remove("hidden");
@@ -56,7 +52,7 @@ function animarSorteo(resultado) {
   }, tiempoCaida + 1200);
 }
 
-// ── Mostrar tabla de resultados ──────────────────────────────
+// ── Mostrar tabla de resultados 
 function mostrarResultados(resultado) {
   ganadorInfo.textContent = "🎉 ¡El sorteo está listo!";
 
@@ -81,7 +77,7 @@ function mostrarResultados(resultado) {
   sorteoContenedor.appendChild(tabla);
 }
 
-// ── Confeti ──────────────────────────────────────────────────
+// ── Confeti
 function lanzarConfeti() {
   const colores = ["#FF0000", "#00FF00", "#0000FF", "#FFD700", "#FF69B4", "#00CED1"];
 

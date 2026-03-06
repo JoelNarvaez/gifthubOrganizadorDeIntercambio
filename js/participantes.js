@@ -1,5 +1,5 @@
 
-// ── Referencias al DOM ───────────────────────────────────────
+// ── Referencias al DOM
 const inputOrganizador    = document.getElementById("nombre-organizador");
 const checkboxIncluir     = document.getElementById("incluirOrganizador");
 const organizadorItem     = document.getElementById("organizador-item");
@@ -9,21 +9,29 @@ const btnAgregar          = document.getElementById("btn-agregar");
 const inputNuevo          = document.getElementById("nuevo-participante");
 const listaParticipantes  = document.getElementById("lista-participantes");
 
-// ── Paso 2: Organizador 
+// ── Paso 2: Organizador
 
-// Actualiza visualmente el item del organizador en el paso 3
+// Actualizar visualmente el item del organizador en el paso 3
+// y refleja si está incluido o no en el sorteo
 function actualizarOrganizador() {
   const incluir = checkboxIncluir.checked;
-  organizadorInput.value = inputOrganizador.value;
+  const nombre  = inputOrganizador.value.trim();
+
+  organizadorInput.value = nombre;
+
+  // Mantener data-nombre sincronizado para que guardarParticipantes lo capture
+  if (incluir && nombre) {
+    organizadorItem.dataset.nombre = nombre;
+  } else {
+    delete organizadorItem.dataset.nombre;
+  }
 
   if (incluir) {
-    organizadorItem.classList.replace("bg-gray-100", "bg-gray-200");
     organizadorInput.disabled = false;
     organizadorInput.classList.remove("text-gray-400");
     estadoIcono.innerHTML = "✔";
     estadoIcono.className = "ml-2 text-green-600 font-bold text-lg";
   } else {
-    organizadorItem.classList.replace("bg-gray-200", "bg-gray-100");
     organizadorInput.disabled = true;
     organizadorInput.classList.add("text-gray-400");
     estadoIcono.innerHTML = "✖";
@@ -34,18 +42,27 @@ function actualizarOrganizador() {
 // Guarda el organizador en localStorage al dar Continuar en paso 2
 function guardarOrganizador() {
   const id = leerEventoActivo();
-  actualizarCampo(id, "organizador", inputOrganizador.value.trim());
+  actualizarCampo(id, "organizador",        inputOrganizador.value.trim());
   actualizarCampo(id, "incluirOrganizador", checkboxIncluir.checked);
 }
 
 // Escuchadores del paso 2
-inputOrganizador.addEventListener("input", actualizarOrganizador);
-checkboxIncluir.addEventListener("change", actualizarOrganizador);
+inputOrganizador.addEventListener("input", () => {
+  actualizarOrganizador();
+  // Guardar en tiempo real para que paso 3+ siempre lo tenga
+  const id = leerEventoActivo();
+  if (id) actualizarCampo(id, "organizador", inputOrganizador.value.trim());
+});
+checkboxIncluir.addEventListener("change", () => {
+  actualizarOrganizador();
+  const id = leerEventoActivo();
+  if (id) actualizarCampo(id, "incluirOrganizador", checkboxIncluir.checked);
+});
 
 // Ejecutar al cargar para que el estado inicial sea correcto
 actualizarOrganizador();
 
-// ── Paso 3: Lista de participantes
+// ── Paso 3: Lista de participantes 
 
 // Crea y agrega un elemento de participante a la lista del DOM
 function agregarParticipanteDOM(nombre) {
@@ -58,7 +75,7 @@ function agregarParticipanteDOM(nombre) {
   input.value = nombre;
   input.className = "w-full bg-transparent outline-none text-gray-600";
 
-  // Si editan el nombre, actualizamos el dataset
+  // Si editan el nombre, actualizamos el dataset para que se guarde bien
   input.addEventListener("input", () => {
     div.dataset.nombre = input.value;
   });
@@ -90,18 +107,15 @@ inputNuevo.addEventListener("keydown", (e) => {
 function guardarParticipantes() {
   const id = leerEventoActivo();
 
-  // Recolectar participantes agregados manualmente
+  // Todos los elementos con data-nombre dentro de #lista-participantes
+  // Incluye organizador-item (si tiene data-nombre) y participantes manuales
   const items = listaParticipantes.querySelectorAll("[data-nombre]");
   const participantes = Array.from(items)
     .map(div => div.dataset.nombre.trim())
     .filter(n => n !== "");
 
-  // Si el organizador está incluido, agregarlo al inicio de la lista
-  const incluir = checkboxIncluir.checked;
-  const nombreOrg = inputOrganizador.value.trim();
-  if (incluir && nombreOrg !== "" && !participantes.includes(nombreOrg)) {
-    participantes.unshift(nombreOrg);
-  }
+  // Deduplicar por si acaso
+  const unicos = [...new Set(participantes)];
 
-  actualizarCampo(id, "participantes", participantes);
+  actualizarCampo(id, "participantes", unicos);
 }

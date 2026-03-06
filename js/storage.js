@@ -32,7 +32,7 @@ function crearEvento() {
   return nuevoId;
 }
 
-// ── Actualizar un campo de un evento específico ──────────────
+// ── Actualizar un campo de un evento específico 
 function actualizarCampo(id, campo, valor) {
   const lista = leerEventos();
   const idx = lista.findIndex(e => e.id === id);

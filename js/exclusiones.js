@@ -1,9 +1,5 @@
-// ============================================================
-//  exclusiones.js  —  Lógica del paso 4 (¿hay exclusiones?)
-//                     y paso 5 (configurar exclusiones con drag & drop)
-// ============================================================
 
-// ── Referencias al DOM ───────────────────────────────────────
+// ── Referencias al DOM 
 const modalExclusiones    = document.getElementById("modal-exclusiones");
 const tituloModal         = document.getElementById("titulo-modal");
 const listaArrastrable    = document.getElementById("lista-arrastrable");
@@ -11,12 +7,12 @@ const zonaExclusion       = document.getElementById("zona-exclusion");
 const exclusionesActuales = document.getElementById("exclusiones-actuales");
 const contenedorPaso5     = document.getElementById("lista-exclusiones");
 
-// ── Estado local temporal (antes de guardar) ─────────────────
+// ── Estado local temporal (antes de guardar) 
 // Solo se usa mientras el modal está abierto
 let exclusionesTemp = {};
 let personaEnModal  = "";
 
-// ── Paso 5: Renderizar lista de participantes ────────────────
+// ── Paso 5: Renderizar lista de participantes 
 
 // Se llama desde main.js al entrar al paso 5
 // Lee los participantes desde localStorage y renderiza la lista
@@ -64,7 +60,7 @@ function actualizarResumen(nombre) {
     : "Sin exclusiones";
 }
 
-// ── Modal de exclusiones ─────────────────────────────────────
+// ── Modal de exclusiones 
 
 function abrirModal(nombre) {
   personaEnModal           = nombre;
@@ -137,7 +133,7 @@ function quitarExclusion(nombre, excluido) {
   renderizarExclusionesActuales(nombre);
 }
 
-// ── Drag & Drop sobre la zona ────────────────────────────────
+// ── Drag & Drop sobre la zona 
 
 zonaExclusion.addEventListener("dragover", (e) => {
   e.preventDefault();
@@ -165,7 +161,7 @@ zonaExclusion.addEventListener("drop", (e) => {
   renderizarExclusionesActuales(nombre);
 });
 
-// ── Guardar exclusiones en localStorage ─────────────────────
+// ── Guardar exclusiones en localStorage 
 
 // Se llama desde el botón "Guardar" del modal
 function guardarExclusionesModal() {

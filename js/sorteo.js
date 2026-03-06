@@ -1,10 +1,5 @@
-// ============================================================
-//  sorteo.js  —  Algoritmo puro del sorteo
-//  Sin DOM, sin localStorage, solo recibe datos y devuelve resultado
-//  Esto permite probarlo fácilmente de forma independiente
-// ============================================================
 
-// ── Algoritmo principal ──────────────────────────────────────
+// ── Algoritmo principal 
 // Recibe:
 //   participantes : ["Ana", "Luis", "Gina", "Lalo"]
 //   exclusiones   : { "Gina": ["Angelica"], "Ana": ["Luis"] }
@@ -25,7 +20,7 @@ function realizarSorteo(participantes, exclusiones) {
   return null;
 }
 
-// ── Intento individual de sorteo ─────────────────────────────
+// ── Intento individual de sorteo
 function intentarSorteo(participantes, exclusiones) {
   // Copiar y mezclar aleatoriamente los receptores
   const receptores = mezclar([...participantes]);
@@ -49,7 +44,7 @@ function intentarSorteo(participantes, exclusiones) {
   return resultado;
 }
 
-// ── Mezcla aleatoria (Fisher-Yates) ─────────────────────────
+// ── Mezcla aleatoria (Fisher-Yates)
 function mezclar(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -58,7 +53,7 @@ function mezclar(array) {
   return array;
 }
 
-// ── Función pública que lee de localStorage y ejecuta ────────
+// ── Función pública que lee de localStorage y ejecuta 
 // Devuelve el resultado del sorteo o null si falló
 function ejecutarSorteo() {
   const id            = leerEventoActivo();

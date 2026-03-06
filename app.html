@@ -75,29 +75,7 @@ input[type="number"]:focus {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(236, 72, 153, 0.35);
 }
-.btn-continuar:active {
-  transform: translateY(0);
-}
-
-/* ── Chip arrastrable mejorado ──────────────────────── */
-.chip-drag {
-  background: linear-gradient(135deg, #fff0f5, #ffe8f0);
-  color: #ec4899;
-  border: 1.5px solid #fbcfe8;
-  padding: 7px 14px;
-  border-radius: 50px;
-  cursor: grab;
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-align: center;
-  transition: transform 0.15s, box-shadow 0.15s;
-  user-select: none;
-}
-.chip-drag:hover {
-  transform: scale(1.05);
-  box-shadow: 0 3px 10px rgba(236,72,153,0.2);
-}
-.chip-drag:active { cursor: grabbing; }
+.btn-continuar:active { transform: translateY(0); }
 
 /* ── Zona drop con feedback visual ─────────────────── */
 #zona-exclusion {
@@ -109,12 +87,7 @@ input[type="number"]:focus {
   transform: scale(1.02);
 }
 
-/* ── Participante item animado al agregar ───────────── */
-.participante-nuevo {
-  animation: entrar 0.3s ease;
-}
-
-/* ── Logo pulse suave ───────────────────────────────── */
+/* ── Logo ───────────────────────────────────────────── */
 .logo-swapit {
   font-family: 'Fredoka', sans-serif;
   font-size: 1.6rem;
@@ -149,7 +122,8 @@ input[type="number"]:focus {
     <div class="hidden md:flex items-center gap-8">
       <ul class="flex gap-8">
         <li class="cursor-pointer hover:text-blue-100 transition">Inicio</li>
-        <li class="cursor-pointer hover:text-blue-100 transition">Mis eventos</li>
+        <li class="cursor-pointer hover:text-blue-100 transition"
+            onclick="abrirDrawer()">Mis eventos</li>
         <li class="cursor-pointer hover:text-blue-100 transition">Regalos</li>
       </ul>
       <div class="flex gap-4">
@@ -158,8 +132,7 @@ input[type="number"]:focus {
                        hover:bg-blue-50 transition hover:-translate-y-0.5 hover:shadow-md">
           + Evento
         </button>
-        <button class="border border-white px-4 py-2 rounded-lg
-                       hover:bg-white/10 transition">
+        <button class="border border-white px-4 py-2 rounded-lg hover:bg-white/10 transition">
           Iniciar
         </button>
       </div>
@@ -167,10 +140,11 @@ input[type="number"]:focus {
   </div>
 
   <!-- Menú móvil -->
-  <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-4">
+  <div id="mobile-menu" class="hidden mt-4 space-y-4 border-t border-white/20 pt-4">
     <ul class="space-y-2">
       <li class="cursor-pointer hover:text-blue-100 transition">Inicio</li>
-      <li class="cursor-pointer hover:text-blue-100 transition">Mis eventos</li>
+      <li class="cursor-pointer hover:text-blue-100 transition"
+          onclick="cerrarMenuMovil(); abrirDrawer();">Mis eventos</li>
       <li class="cursor-pointer hover:text-blue-100 transition">Regalos</li>
     </ul>
     <div class="flex flex-col gap-2">
@@ -210,7 +184,8 @@ input[type="number"]:focus {
         de forma rápida, divertida y segura.
       </p>
 
-      <button onclick="siguiente('paso-0','paso-1')"
+      <!-- Sin onclick aquí — lo maneja init() en main.js -->
+      <button id="btn-comenzar"
               class="btn-continuar mt-2 bg-pink-500 hover:bg-pink-600
                      text-white px-10 py-4 rounded-2xl text-lg font-semibold shadow-xl">
         Comenzar ✨
@@ -222,10 +197,17 @@ input[type="number"]:focus {
       <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">Datos del intercambio</h2>
       <input type="text" id="nombre-evento" placeholder="Nombre del evento"
              class="w-full p-3 mb-4 border-2 border-gray-200 rounded-xl">
-      <button onclick="siguiente('paso-1','paso-2')"
-              class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl w-full font-semibold">
-        Continuar →
-      </button>
+      <div class="flex gap-3">
+        <button onclick="siguiente('paso-1','paso-0')"
+                class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
+                       px-5 py-3 rounded-xl font-semibold">
+          ←
+        </button>
+        <button onclick="siguiente('paso-1','paso-2')"
+                class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl flex-1 font-semibold">
+          Continuar →
+        </button>
+      </div>
     </section>
 
     <!-- ══ PASO 2 ══ Organizador ════════════════════════ -->
@@ -243,16 +225,22 @@ input[type="number"]:focus {
 
         <label class="flex items-center gap-3 text-gray-700 mb-6 cursor-pointer
                       p-3 rounded-xl hover:bg-pink-50 transition">
-          <input type="checkbox" id="incluirOrganizador" checked
-                 class="w-5 h-5 accent-pink-500">
+          <input type="checkbox" id="incluirOrganizador" checked class="w-5 h-5 accent-pink-500">
           Inclúyeme (el organizador) en el sorteo
         </label>
 
-        <button onclick="siguiente('paso-2','paso-3')"
-                class="btn-continuar w-full py-3 rounded-2xl text-lg font-semibold text-white
-                       bg-pink-500 shadow-lg flex items-center justify-center gap-2">
-          Continuar ➜
-        </button>
+        <div class="flex gap-3">
+          <button onclick="siguiente('paso-2','paso-1')"
+                  class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
+                         px-5 py-3 rounded-2xl font-semibold">
+            ←
+          </button>
+          <button onclick="siguiente('paso-2','paso-3')"
+                  class="btn-continuar flex-1 py-3 rounded-2xl text-lg font-semibold text-white
+                         bg-pink-500 shadow-lg flex items-center justify-center gap-2">
+            Continuar ➜
+          </button>
+        </div>
       </div>
     </section>
 
@@ -356,11 +344,11 @@ input[type="number"]:focus {
              style="animation: entrar 0.3s cubic-bezier(0.34,1.4,0.64,1);">
 
           <button onclick="cerrarModal()"
-                  class="absolute top-3 right-3 text-gray-300 hover:text-gray-600
-                         text-xl transition">✕</button>
+                  class="absolute top-3 right-3 text-gray-300 hover:text-gray-600 text-xl transition">
+            ✕
+          </button>
 
-          <h3 id="titulo-modal"
-              class="text-xl font-bold text-center mb-4 text-pink-500"></h3>
+          <h3 id="titulo-modal" class="text-xl font-bold text-center mb-4 text-pink-500"></h3>
 
           <div id="lista-arrastrable"
                class="flex flex-wrap gap-2 mb-4 min-h-[50px] max-h-48 overflow-y-auto">
@@ -381,137 +369,224 @@ input[type="number"]:focus {
               Cancelar
             </button>
             <button onclick="guardarExclusionesModal()"
-                    class="w-1/2 bg-pink-500 text-white py-2 rounded-lg
-                           hover:bg-pink-600 transition">
+                    class="w-1/2 bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 transition">
               Guardar ✓
             </button>
           </div>
         </div>
       </div>
 
-      <button onclick="siguiente('paso-5','paso-6')"
-              class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl w-full mt-4 font-semibold">
-        Continuar →
-      </button>
+      <div class="flex gap-3 mt-4">
+        <button onclick="siguiente('paso-5','paso-4')"
+                class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
+                       px-5 py-3 rounded-xl font-semibold">
+          ←
+        </button>
+        <button onclick="siguiente('paso-5','paso-6')"
+                class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl flex-1 font-semibold">
+          Continuar →
+        </button>
+      </div>
     </section>
 
     <!-- ══ PASO 6 ══ Tipo de evento ══════════════════════ -->
     <section id="paso-6" class="hidden">
-      <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">Tipo de sorteo</h2>
+      <h2 class="text-2xl font-bold mb-1 text-center text-gray-800">Tipo de celebración</h2>
+      <p class="text-center text-gray-400 text-sm mb-3">Elige una opción predefinida o crea la tuya</p>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <button class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-evento="Navidad">
-          <img src="imagenes/arbol.png" alt="Navidad" class="w-20 h-20 mb-2">
-          <span class="font-semibold text-gray-700">Navidad</span>
+      <!-- Grid 5 opciones predefinidas + 1 celda personalizada -->
+      <div class="grid grid-cols-3 gap-2 mb-3">
+
+        <button class="evento-btn flex flex-col items-center py-3 px-2 rounded-2xl
+                       bg-white border border-gray-100 shadow-sm hover:shadow-md
+                       transition-all" data-evento="Navidad">
+          <img src="imagenes/arbol.png" alt="Navidad"
+               class="w-12 h-12 mb-1.5 object-contain">
+          <span class="font-semibold text-gray-700 text-xs">Navidad</span>
         </button>
 
-        <button class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-evento="San Valentin">
-          <img src="imagenes/valentin.png" alt="San Valentín" class="w-20 h-20 mb-2">
-          <span class="font-semibold text-gray-700">San Valentín</span>
+        <button class="evento-btn flex flex-col items-center py-3 px-2 rounded-2xl
+                       bg-white border border-gray-100 shadow-sm hover:shadow-md
+                       transition-all" data-evento="San Valentin">
+          <img src="imagenes/valentin.png" alt="San Valentín"
+               class="w-12 h-12 mb-1.5 object-contain">
+          <span class="font-semibold text-gray-700 text-xs text-center leading-tight">San Valentín</span>
         </button>
 
-        <button class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-evento="Dia del Nino">
-          <img src="imagenes/nino.jpg" alt="Día del Niño" class="w-20 h-20 mb-2 rounded-lg">
-          <span class="font-semibold text-gray-700">Día del Niño</span>
+        <button class="evento-btn flex flex-col items-center py-3 px-2 rounded-2xl
+                       bg-white border border-gray-100 shadow-sm hover:shadow-md
+                       transition-all" data-evento="Dia del Nino">
+          <img src="imagenes/nino.jpg" alt="Día del Niño"
+               class="w-12 h-12 mb-1.5 object-cover rounded-xl">
+          <span class="font-semibold text-gray-700 text-xs text-center leading-tight">Día del Niño</span>
         </button>
 
-        <button class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-evento="Dia de las Madres">
-          <img src="imagenes/madre.png" alt="Día de las Madres" class="w-20 h-20 mb-2">
-          <span class="font-semibold text-gray-700">Día de las Madres</span>
+        <button class="evento-btn flex flex-col items-center py-3 px-2 rounded-2xl
+                       bg-white border border-gray-100 shadow-sm hover:shadow-md
+                       transition-all" data-evento="Dia de las Madres">
+          <img src="imagenes/madre.png" alt="Día de las Madres"
+               class="w-12 h-12 mb-1.5 object-contain">
+          <span class="font-semibold text-gray-700 text-xs text-center leading-tight">Día Mamá</span>
         </button>
 
-        <button class="evento-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-evento="Halloween">
-          <img src="imagenes/ha.jpg" alt="Halloween" class="w-20 h-20 mb-2 rounded-lg">
-          <span class="font-semibold text-gray-700">Halloween</span>
+        <button class="evento-btn flex flex-col items-center py-3 px-2 rounded-2xl
+                       bg-white border border-gray-100 shadow-sm hover:shadow-md
+                       transition-all" data-evento="Halloween">
+          <img src="imagenes/ha.jpg" alt="Halloween"
+               class="w-12 h-12 mb-1.5 object-cover rounded-xl">
+          <span class="font-semibold text-gray-700 text-xs">Halloween</span>
         </button>
 
-        <input type="text" id="eventoPersonalizado"
-               placeholder="Escribe tu evento..."
-               class="border-2 border-dashed border-gray-200 p-3 rounded-2xl
-                      text-sm text-center text-gray-500 hover:border-pink-300 transition">
+        <!-- Celda personalizada integrada al grid -->
+        <div id="zona-imagen-evento"
+             class="flex flex-col items-center justify-center py-3 px-2 rounded-2xl
+                    border-2 border-dashed border-pink-200 bg-pink-50/60
+                    cursor-pointer hover:border-pink-400 hover:bg-pink-50
+                    transition-all relative overflow-hidden"
+             ondragover="event.preventDefault(); this.classList.add('border-pink-500','bg-pink-100','scale-105')"
+             ondragleave="this.classList.remove('border-pink-500','bg-pink-100','scale-105')"
+             ondrop="soltar(event)"
+             onclick="document.getElementById('input-foto-evento').click()">
+
+          <!-- Preview de imagen -->
+          <img id="preview-evento" src="" alt=""
+               class="hidden w-full h-full object-cover absolute inset-0 rounded-2xl">
+
+          <!-- Estado vacío -->
+          <div id="placeholder-imagen" class="flex flex-col items-center gap-1 pointer-events-none">
+            <span class="text-2xl">📷</span>
+            <span class="text-[10px] text-pink-400 font-semibold text-center leading-tight">
+              Tu foto
+            </span>
+          </div>
+
+          <!-- Botón quitar -->
+          <button id="btn-quitar-imagen"
+                  class="hidden absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500
+                         text-white text-[9px] items-center justify-center
+                         hover:bg-red-600 transition z-10 leading-none"
+                  onclick="quitarImagenEvento(event)">✕</button>
+        </div>
+
+        <input type="file" id="input-foto-evento" accept="image/*"
+               class="hidden" onchange="cargarImagenGaleria(event)">
       </div>
 
-      <button onclick="siguiente('paso-6','paso-7')"
-              class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl w-full mt-4 font-semibold">
-        Continuar →
-      </button>
+      <!-- Campo nombre personalizado — aparece solo cuando hay imagen cargada -->
+      <div id="campo-nombre-custom"
+           class="hidden mb-3 p-3 rounded-2xl border-2 border-pink-200 bg-pink-50/40">
+        <p class="text-xs text-pink-500 font-semibold mb-2">✏️ Ponle nombre a tu evento</p>
+        <input type="text" id="eventoPersonalizado"
+               placeholder="Ej: Intercambio de cumpleaños..."
+               class="w-full p-2.5 border-2 border-gray-200 rounded-xl text-sm
+                      focus:border-pink-400 transition bg-white"
+               oninput="onEscribeNombrePersonal()">
+      </div>
+
+      <!-- Chip de confirmación cuando hay imagen + nombre -->
+      <div id="preview-custom-seleccionado"
+           class="hidden mb-3 flex items-center gap-3 bg-white rounded-2xl px-3 py-2.5
+                  border-2 border-pink-300 shadow-sm">
+        <img id="preview-mini" src="" alt=""
+             class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
+        <div class="min-w-0">
+          <p class="text-[10px] text-gray-400 font-medium">Evento personalizado</p>
+          <p id="preview-nombre" class="text-sm font-bold text-gray-700 truncate"></p>
+        </div>
+        <span class="ml-auto flex-shrink-0 text-xs bg-pink-500 text-white
+                     px-2 py-0.5 rounded-full font-semibold">✓</span>
+      </div>
+
+      <div class="flex gap-3">
+        <button onclick="siguiente('paso-6','paso-4')"
+                class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
+                       px-5 py-3 rounded-xl font-semibold">
+          ←
+        </button>
+        <button onclick="siguiente('paso-6','paso-7')"
+                class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl flex-1 font-semibold">
+          Continuar →
+        </button>
+      </div>
     </section>
 
     <!-- ══ PASO 7 ══ Fecha ══════════════════════════════ -->
     <section id="paso-7" class="hidden">
       <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">Fecha del evento</h2>
-
       <div id="fechas-sugeridas" class="mb-3 space-y-2"></div>
-
-      <input type="date"
-             class="w-full p-3 mb-4 border-2 border-gray-200 rounded-xl">
-
-      <button onclick="siguiente('paso-7','paso-8')"
-              class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl w-full font-semibold">
-        Continuar →
-      </button>
+      <input type="date" class="w-full p-3 mb-4 border-2 border-gray-200 rounded-xl">
+      <div class="flex gap-3">
+        <button onclick="siguiente('paso-7','paso-6')"
+                class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
+                       px-5 py-3 rounded-xl font-semibold">
+          ←
+        </button>
+        <button onclick="siguiente('paso-7','paso-8')"
+                class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl flex-1 font-semibold">
+          Continuar →
+        </button>
+      </div>
     </section>
 
     <!-- ══ PASO 8 ══ Presupuesto ════════════════════════ -->
     <section id="paso-8" class="hidden">
       <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">Presupuesto</h2>
-
       <div class="grid grid-cols-2 gap-4">
-        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-presupuesto="50">
+        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow" data-presupuesto="50">
           <img src="imagenes/billete50.jpg" alt="$50" class="w-full h-24 object-cover rounded-lg mb-1">
           <span class="font-bold text-gray-700">$50</span>
         </button>
-
-        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-presupuesto="100">
+        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow" data-presupuesto="100">
           <img src="imagenes/billete100.jpg" alt="$100" class="w-full h-24 object-cover rounded-lg mb-1">
           <span class="font-bold text-gray-700">$100</span>
         </button>
-
-        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-presupuesto="200">
+        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow" data-presupuesto="200">
           <img src="imagenes/billete200.png" alt="$200" class="w-full h-24 object-cover rounded-lg mb-1">
           <span class="font-bold text-gray-700">$200</span>
         </button>
-
-        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow"
-                data-presupuesto="500">
+        <button class="presupuesto-btn flex flex-col items-center p-4 rounded-2xl shadow" data-presupuesto="500">
           <img src="imagenes/billete500.png" alt="$500" class="w-full h-24 object-cover rounded-lg mb-1">
           <span class="font-bold text-gray-700">$500</span>
         </button>
       </div>
-
       <input type="number" id="presupuestoPersonalizado"
              placeholder="Otro monto..."
              class="mt-4 w-full border-2 border-gray-200 rounded-xl p-3">
-
-      <button onclick="siguiente('paso-8','paso-9')"
-              class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl w-full mt-4 font-semibold">
-        Continuar →
-      </button>
+      <div class="flex gap-3 mt-4">
+        <button onclick="siguiente('paso-8','paso-7')"
+                class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
+                       px-5 py-3 rounded-xl font-semibold">
+          ←
+        </button>
+        <button onclick="siguiente('paso-8','paso-9')"
+                class="btn-continuar bg-pink-500 text-white px-6 py-3 rounded-xl flex-1 font-semibold">
+          Continuar →
+        </button>
+      </div>
     </section>
 
     <!-- ══ PASO 9 ══ ¿Qué deseas hacer? ════════════════ -->
     <section id="paso-9" class="hidden text-center">
-      <h2 class="text-2xl font-bold mb-6 text-gray-800">¿Qué deseas hacer?</h2>
-      <div class="flex flex-col gap-4">
+      <h2 class="text-2xl font-bold mb-2 text-gray-800">¿Qué deseas hacer?</h2>
+      <p class="text-gray-400 text-sm mb-6">El evento está listo para el sorteo</p>
+      <div class="flex flex-col gap-3">
         <button onclick="siguiente('paso-9','paso-10')"
                 class="btn-continuar bg-blue-400 hover:bg-blue-500 text-white
                        px-6 py-4 rounded-2xl font-semibold flex items-center
                        justify-center gap-3 text-lg">
-          📋 Mostrar información
+          📋 Ver información
         </button>
         <button onclick="mostrarSorteo()"
                 class="btn-continuar bg-pink-500 hover:bg-pink-600 text-white
                        px-6 py-4 rounded-2xl font-semibold flex items-center
                        justify-center gap-3 text-lg">
           🎲 ¡Hacer el sorteo!
+        </button>
+        <button onclick="siguiente('paso-9','paso-8')"
+                class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
+                       px-6 py-3 rounded-2xl font-semibold flex items-center
+                       justify-center gap-2 text-sm mt-1">
+          ← Regresar
         </button>
       </div>
     </section>
@@ -527,7 +602,6 @@ input[type="number"]:focus {
       <p id="ganador-info" class="text-gray-500 mb-4">
         ¡Los nombres están entrando a la caja!
       </p>
-
       <div id="sorteo-container" class="relative w-96 h-96 mx-auto">
         <img id="caja" class="caja absolute w-full h-full object-contain"
              src="imagenes/caja-regalo.png">
@@ -536,6 +610,12 @@ input[type="number"]:focus {
         <div id="participantes-container"
              class="absolute inset-0 overflow-hidden relative"></div>
       </div>
+      <button onclick="siguiente('paso-11','paso-9')"
+              class="btn-continuar mt-6 bg-gray-100 hover:bg-gray-200 text-gray-500
+                     px-6 py-3 rounded-2xl font-semibold inline-flex items-center
+                     justify-center gap-2 text-sm">
+        ← Volver al inicio
+      </button>
     </section>
 
   </div><!-- /grid -->
@@ -551,6 +631,50 @@ input[type="number"]:focus {
   </div><!-- /tarjeta -->
 </div>
 </main>
+
+<!-- ══ DRAWER: Mis Eventos ═════════════════════════════════ -->
+
+<!-- Fondo oscuro -->
+<div id="drawer-overlay"
+     class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity"
+     onclick="cerrarDrawer()"></div>
+
+<!-- Panel lateral -->
+<div id="drawer-eventos"
+     class="fixed top-0 right-0 h-full w-full max-w-sm bg-white z-50
+            shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out
+            flex flex-col">
+
+  <!-- Header del drawer -->
+  <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-pink-50">
+    <div>
+      <h3 class="text-lg font-bold text-gray-800" style="font-family:'Fredoka',sans-serif;">
+        🎁 Mis Eventos
+      </h3>
+      <p id="drawer-count" class="text-xs text-gray-400 mt-0.5"></p>
+    </div>
+    <button onclick="cerrarDrawer()"
+            class="w-8 h-8 rounded-lg bg-white border border-gray-200
+                   flex items-center justify-center text-gray-400
+                   hover:text-gray-600 hover:border-gray-300 transition">
+      ✕
+    </button>
+  </div>
+
+  <!-- Lista de eventos -->
+  <div id="drawer-lista" class="flex-1 overflow-y-auto px-4 py-4 space-y-3"></div>
+
+  <!-- Footer del drawer -->
+  <div class="px-4 py-4 border-t border-gray-100">
+    <button onclick="cerrarDrawer(); nuevoEvento();"
+            class="w-full bg-pink-500 hover:bg-pink-600 text-white
+                   py-3 rounded-xl font-semibold transition
+                   flex items-center justify-center gap-2 text-sm">
+      + Crear nuevo evento
+    </button>
+  </div>
+
+</div>
 
 <!-- ══ FOOTER ══════════════════════════════════════════════ -->
 <footer class="bg-yellow-100 text-center p-3 mt-4 text-sm text-gray-500">

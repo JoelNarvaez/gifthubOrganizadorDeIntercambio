@@ -3,51 +3,151 @@
 let tipoEventoSeleccionado  = "";
 let fechaSeleccionada       = "";
 let presupuestoSeleccionado = 0;
+let imagenPersonalBase64    = "";   
 
 // ── Paso 6: Tipo de evento ───────────────────────────────────
 
 const botonesEvento       = document.querySelectorAll(".evento-btn");
 const inputEventoPersonal = document.getElementById("eventoPersonalizado");
 
-// Marcar botón seleccionado visualmente
+// Marcar botón predefinido seleccionado
 botonesEvento.forEach(btn => {
   btn.addEventListener("click", () => {
-
-    // Quitar selección anterior
-    botonesEvento.forEach(b => {
-      b.classList.remove("ring-2", "ring-pink-500", "bg-pink-50");
-    });
-
-    // Marcar el seleccionado
-    btn.classList.add("ring-2", "ring-pink-500", "bg-pink-50");
-
-    // Guardar el valor
+    botonesEvento.forEach(b => b.classList.remove("ring-2","ring-pink-500","bg-pink-50"));
+    btn.classList.add("ring-2","ring-pink-500","bg-pink-50");
     tipoEventoSeleccionado = btn.dataset.evento;
-
-    // Limpiar el input personalizado
-    inputEventoPersonal.value = "";
+    imagenPersonalBase64   = "";
+    // Limpiar la card personalizada visualmente
+    if (inputEventoPersonal) inputEventoPersonal.value = "";
+    resetPreviewCustom();
   });
 });
 
-// Si escribe en el input personalizado, deseleccionar botones
-inputEventoPersonal.addEventListener("input", () => {
-  botonesEvento.forEach(b => {
-    b.classList.remove("ring-2", "ring-pink-500", "bg-pink-50");
-  });
+// Si escribe en el input personalizado, deseleccionar botones predefinidos
+if (inputEventoPersonal) {
+  inputEventoPersonal.addEventListener("input", onEscribeNombrePersonal);
+}
+
+function onEscribeNombrePersonal() {
+  botonesEvento.forEach(b => b.classList.remove("ring-2","ring-pink-500","bg-pink-50"));
   tipoEventoSeleccionado = inputEventoPersonal.value.trim();
-});
+  actualizarPreviewCustom();
+}
 
-// Guarda el tipo de evento en localStorage
+// ── Imagen personalizada: galería ───────────────────────────
+function cargarImagenGaleria(event) {
+  const archivo = event.target.files[0];
+  if (!archivo) return;
+  procesarArchivo(archivo);
+}
+
+// ── Imagen personalizada: drag & drop ───────────────────────
+function soltar(event) {
+  event.preventDefault();
+  const zona = document.getElementById("zona-imagen-evento");
+  zona.classList.remove("border-pink-500","bg-pink-50","scale-105");
+
+  const archivo = event.dataTransfer.files[0];
+  if (!archivo || !archivo.type.startsWith("image/")) return;
+  procesarArchivo(archivo);
+}
+
+// ── Procesar archivo de imagen ────────────────────────────────
+function procesarArchivo(archivo) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    imagenPersonalBase64 = e.target.result;
+
+    const preview     = document.getElementById("preview-evento");
+    const placeholder = document.getElementById("placeholder-imagen");
+    const btnQuitar   = document.getElementById("btn-quitar-imagen");
+    const campoNombre = document.getElementById("campo-nombre-custom");
+
+    preview.src = imagenPersonalBase64;
+    preview.classList.remove("hidden");
+    placeholder.classList.add("hidden");
+    btnQuitar.classList.remove("hidden");
+    btnQuitar.style.display = "flex";
+
+    // Mostrar campo de nombre
+    if (campoNombre) campoNombre.classList.remove("hidden");
+
+    // Deseleccionar predefinidos
+    botonesEvento.forEach(b => b.classList.remove("ring-2","ring-pink-500","bg-pink-50"));
+
+    actualizarPreviewCustom();
+  };
+  reader.readAsDataURL(archivo);
+}
+
+// ── Quitar imagen cargada ────────────────────────────────────
+function quitarImagenEvento(event) {
+  event.stopPropagation();
+  imagenPersonalBase64 = "";
+
+  const preview     = document.getElementById("preview-evento");
+  const placeholder = document.getElementById("placeholder-imagen");
+  const btnQuitar   = document.getElementById("btn-quitar-imagen");
+  const inputFile   = document.getElementById("input-foto-evento");
+  const campoNombre = document.getElementById("campo-nombre-custom");
+
+  preview.src = "";
+  preview.classList.add("hidden");
+  placeholder.classList.remove("hidden");
+  btnQuitar.classList.add("hidden");
+  if (inputFile) inputFile.value = "";
+  if (campoNombre) campoNombre.classList.add("hidden");
+
+  actualizarPreviewCustom();
+}
+
+// ── Preview inferior: muestra imagen + nombre cuando ambos están ──
+function actualizarPreviewCustom() {
+  const nombre    = inputEventoPersonal ? inputEventoPersonal.value.trim() : "";
+  const contenedor = document.getElementById("preview-custom-seleccionado");
+  const miniImg   = document.getElementById("preview-mini");
+  const miniNombre = document.getElementById("preview-nombre");
+
+  if (!contenedor) return;
+
+  if (imagenPersonalBase64 && nombre) {
+    miniImg.src      = imagenPersonalBase64;
+    miniNombre.textContent = nombre;
+    contenedor.classList.remove("hidden");
+    contenedor.style.display = "flex";
+    tipoEventoSeleccionado   = nombre;
+  } else {
+    contenedor.classList.add("hidden");
+  }
+}
+
+function resetPreviewCustom() {
+  const contenedor = document.getElementById("preview-custom-seleccionado");
+  if (contenedor) contenedor.classList.add("hidden");
+  quitarImagenEvento({ stopPropagation: () => {} });
+}
+
+// ── Guarda el tipo de evento en localStorage ─────────────────
 function guardarEvento6() {
   const id    = leerEventoActivo();
-  const valor = inputEventoPersonal.value.trim() || tipoEventoSeleccionado;
+  const valor = (inputEventoPersonal && inputEventoPersonal.value.trim())
+                  || tipoEventoSeleccionado;
 
   if (!valor) {
     alert("Por favor selecciona o escribe un tipo de evento.");
-    return false; // indica que no se puede continuar
+    return false;
   }
 
   actualizarCampo(id, "tipoEvento", valor);
+
+  // Si hay imagen personalizada, guardarla limpia (sin saltos de línea)
+  if (imagenPersonalBase64) {
+    actualizarCampo(id, "imagenEvento", imagenPersonalBase64.replace(/\s/g, ""));
+  } else {
+    // Si eligió predefinido, limpiar imagen anterior
+    actualizarCampo(id, "imagenEvento", "");
+  }
+
   return true;
 }
 
@@ -69,7 +169,7 @@ function generarFechasSugeridas() {
     d.setDate(hoy.getDate() + i);
     const dia = d.getDay();
 
-    if (dia === 5 || dia === 6 || dia === 0) { // vie, sab, dom
+    if (dia === 5 || dia === 6 || dia === 0) { 
       const label = d.toLocaleDateString("es-MX", {
         weekday: "long", day: "numeric", month: "long", year: "numeric"
       });
@@ -121,7 +221,7 @@ function guardarFecha() {
   return true;
 }
 
-// ── Paso 8: Presupuesto
+// ── Paso 8: Presupuesto 
 
 const botonesPresupuesto       = document.querySelectorAll(".presupuesto-btn");
 const inputPresupuestoPersonal = document.getElementById("presupuestoPersonalizado");

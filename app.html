@@ -137,14 +137,17 @@ input[type="number"]:focus {
   <!-- Menú móvil -->
   <div id="mobile-menu" class="hidden mt-4 space-y-4 border-t border-white/20 pt-4">
     <ul class="space-y-2">
+      <li class="cursor-pointer hover:text-blue-100 transition">Inicio</li>
       <li class="cursor-pointer hover:text-blue-100 transition"
           onclick="cerrarMenuMovil(); abrirDrawer();">Mis eventos</li>
+      <li class="cursor-pointer hover:text-blue-100 transition">Regalos</li>
     </ul>
     <div class="flex flex-col gap-2">
       <button onclick="nuevoEvento()"
               class="bg-white text-blue-500 px-4 py-2 rounded-lg font-medium">
         + Evento
       </button>
+      <button class="border border-white px-4 py-2 rounded-lg">Iniciar</button>
     </div>
   </div>
 </header>
@@ -159,8 +162,8 @@ input[type="number"]:focus {
 
   <!-- tarjeta -->
   <div class="relative z-10 clip-etiqueta bg-white shadow-xl">
-  <div class="py-16 px-8 md:p-12 min-h-[550px] relative">
-  <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 pt-10 items-center">
+  <div class="py-8 px-8 md:p-12 relative">
+  <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 items-start">
 
     <!-- ══ PASO 0 ══ Inicio ══════════════════════════════ -->
     <section id="paso-0" class="flex flex-col justify-center items-center text-center px-6">
@@ -180,8 +183,7 @@ input[type="number"]:focus {
       <button id="btn-comenzar"
               class="btn-continuar mt-2 bg-pink-500 hover:bg-pink-600
                      text-white px-10 py-4 rounded-2xl text-lg font-semibold shadow-xl">
-        Comenzar
-      </button>
+        Comenzar      </button>
     </section>
 
     <!-- ══ PASO 1 ══ Nombre del evento ══════════════════ -->
@@ -349,7 +351,7 @@ input[type="number"]:focus {
           <div id="zona-exclusion"
                class="border-2 border-dashed border-pink-300 rounded-xl p-4
                       text-center text-pink-500 font-semibold">
-            Arrastra aquí para excluir
+            🗑 Arrastra aquí para excluir
           </div>
 
           <div id="exclusiones-actuales"
@@ -558,7 +560,7 @@ input[type="number"]:focus {
     </section>
 
     <!-- ══ PASO 9 ══ ¿Qué deseas hacer? ════════════════ -->
-    <section id="paso-9" class="hidden text-center">
+    <section id="paso-9" class="hidden text-center lg:col-span-2 max-w-sm mx-auto w-full">
       <h2 class="text-2xl font-bold mb-2 text-gray-800">¿Qué deseas hacer?</h2>
       <p class="text-gray-400 text-sm mb-6">El evento está listo para el sorteo</p>
       <div class="flex flex-col gap-3">
@@ -574,23 +576,37 @@ input[type="number"]:focus {
                        justify-center gap-3 text-lg">
           ¡Hacer el sorteo!
         </button>
+
+        <!-- Separador -->
+        <div class="flex items-center gap-3 my-1">
+          <div class="flex-1 h-px bg-gray-100"></div>
+          <span class="text-xs text-gray-300">o</span>
+          <div class="flex-1 h-px bg-gray-100"></div>
+        </div>
+
+        <button onclick="finalizarEvento()"
+                class="btn-continuar bg-green-500 hover:bg-green-600 text-white
+                       px-6 py-3 rounded-2xl font-semibold flex items-center
+                       justify-center gap-2 text-sm">
+          Finalizar y crear nuevo evento
+        </button>
         <button onclick="siguiente('paso-9','paso-8')"
                 class="btn-continuar bg-gray-100 hover:bg-gray-200 text-gray-500
                        px-6 py-3 rounded-2xl font-semibold flex items-center
-                       justify-center gap-2 text-sm mt-1">
+                       justify-center gap-2 text-sm">
           ← Regresar
         </button>
       </div>
     </section>
 
     <!-- ══ PASO 10 ══ Resumen ═══════════════════════════ -->
-    <section id="paso-10" class="hidden">
+    <section id="paso-10" class="hidden lg:col-span-2">
       <!-- Rellena dinámicamente main.js -->
     </section>
 
     <!-- ══ PASO 11 ══ Resultado del sorteo ══════════════ -->
-    <section id="paso-11" class="hidden text-center">
-      <h2 class="text-2xl font-bold mb-4 text-gray-800">🎉 Resultado del Sorteo</h2>
+    <section id="paso-11" class="hidden text-center lg:col-span-2">
+      <h2 class="text-2xl font-bold mb-4 text-gray-800">Resultado del Sorteo</h2>
       <p id="ganador-info" class="text-gray-500 mb-4">
         ¡Los nombres están entrando a la caja!
       </p>
@@ -613,7 +629,7 @@ input[type="number"]:focus {
   </div><!-- /grid -->
 
   <!-- Agujero decorativo -->
-  <div class="absolute top-2 left-1/2 -translate-x-1/2
+  <div class="absolute top-2 left-1/2 -translate-x-1/2 pointer-events-none
               lg:top-1/2 lg:right-16 lg:left-auto lg:-translate-y-1/2">
     <div class="w-12 h-12 lg:w-24 lg:h-24 border-4 border-pink-300
                 rounded-full bg-blue-100 shadow-inner"></div>

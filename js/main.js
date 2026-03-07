@@ -40,7 +40,7 @@ function alEntrarPaso(paso) {
     }
 
     case "paso-3": {
-      const nombreOrg = document.getElementById("nombre-organizador").value.trim();
+      const nombreOrg = document.getElementById("organizador-nombre").value.trim();
       if (!nombreOrg) {
         siguiente("paso-3", "paso-2");
         mostrarError("paso-2", "Por favor escribe tu nombre antes de continuar.");
@@ -491,10 +491,69 @@ function confirmarEliminar(id, nombre, event) {
   renderizarDrawer();
 }
 
-// ── Nuevo evento ─────────────────────────────────────────────
+// ── Finalizar evento y comenzar uno nuevo ────────────────────
+// ── Finalizar evento (guarda en historial, limpia y regresa al inicio) ───
+function finalizarEvento() {
+  limpiarEventoActivo();
+  limpiarCamposDom();
+  document.querySelectorAll("[id^='paso-']").forEach(p => p.classList.add("hidden"));
+  document.getElementById("paso-0").classList.remove("hidden");
+}
+
+// ── Limpiar todos los campos del DOM ─────────────────────────
+function limpiarCamposDom() {
+  if (typeof resetearEstadoEvento  === "function") resetearEstadoEvento();
+  if (typeof resetearExclusiones   === "function") resetearExclusiones();
+
+  const get = id => document.getElementById(id);
+
+  const elNombreEvento   = get("nombre-evento");
+  const elNombreOrg      = get("organizador-nombre");
+  const elCheckbox       = get("incluirOrganizador");
+  const inputNuevo       = get("nuevo-participante");
+  const listaPartic      = get("lista-participantes");
+  const elEventoPersonal = get("eventoPersonalizado");
+  const elFecha          = get("input-fecha");
+  const elPresupuesto    = get("presupuestoPersonalizado");
+  const campoNombre      = get("campo-nombre-custom");
+  const previewCustom    = get("preview-custom-seleccionado");
+  const previewEvento    = get("preview-evento");
+  const placeholder      = get("placeholder-imagen");
+  const btnQuitarImg     = get("btn-quitar-imagen");
+  const inputFotoFile    = get("input-foto-evento");
+  const contenedorFechas = get("fechas-sugeridas");
+  const orgItem          = get("organizador-item");
+  const orgInput         = get("organizador-nombre");
+
+  if (elNombreEvento)    elNombreEvento.value  = "";
+  if (elNombreOrg)       elNombreOrg.value     = "";
+  if (elCheckbox)        elCheckbox.checked    = true;
+  if (inputNuevo)        inputNuevo.value      = "";
+  if (elEventoPersonal)  elEventoPersonal.value = "";
+  if (elFecha)           elFecha.value         = "";
+  if (elPresupuesto)     elPresupuesto.value   = "";
+  if (contenedorFechas)  contenedorFechas.innerHTML = "";
+  if (campoNombre)       campoNombre.classList.add("hidden");
+  if (previewCustom)  { previewCustom.classList.add("hidden"); previewCustom.style.display = "none"; }
+  if (previewEvento)  { previewEvento.src = ""; previewEvento.classList.add("hidden"); }
+  if (placeholder)    { placeholder.classList.remove("hidden"); }
+  if (btnQuitarImg)   { btnQuitarImg.classList.add("hidden"); btnQuitarImg.style.display = "none"; }
+  if (inputFotoFile)  inputFotoFile.value = "";
+  if (orgItem)           delete orgItem.dataset.nombre;
+  if (orgInput)          orgInput.value        = "";
+
+  if (listaPartic)
+    listaPartic.querySelectorAll("[data-nombre]:not(#organizador-item)").forEach(el => el.remove());
+
+  document.querySelectorAll(".evento-btn, .presupuesto-btn, .fecha-sugerida-btn")
+          .forEach(b => b.classList.remove("seleccionado"));
+}
+
+// ── Nuevo evento (siempre limpio) ────────────────────────────
 function nuevoEvento() {
   const id = crearEvento();
   guardarEventoActivo(id);
+  limpiarCamposDom();
   document.querySelectorAll("[id^='paso-']").forEach(p => p.classList.add("hidden"));
   document.getElementById("paso-1").classList.remove("hidden");
 }
@@ -511,13 +570,14 @@ function nuevoEvento() {
     });
   }
 
-  // Botón Comenzar
+  // Botón Comenzar — siempre crea un evento nuevo limpio
   const btnComenzar = document.getElementById("btn-comenzar");
   if (!btnComenzar) return;
   btnComenzar.removeAttribute("onclick");
   btnComenzar.addEventListener("click", () => {
-    let id = leerEventoActivo();
-    if (!id) { id = crearEvento(); guardarEventoActivo(id); }
+    const id = crearEvento();
+    guardarEventoActivo(id);
+    limpiarCamposDom();
     siguiente("paso-0", "paso-1");
   });
 })();

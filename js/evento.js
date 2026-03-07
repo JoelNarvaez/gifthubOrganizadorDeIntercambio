@@ -3,7 +3,15 @@
 let tipoEventoSeleccionado  = "";
 let fechaSeleccionada       = "";
 let presupuestoSeleccionado = 0;
-let imagenPersonalBase64    = "";   
+let imagenPersonalBase64    = "";
+
+// Exponer al window para que main.js pueda resetearlas al crear nuevo evento
+function resetearEstadoEvento() {
+  tipoEventoSeleccionado  = "";
+  fechaSeleccionada       = "";
+  presupuestoSeleccionado = 0;
+  imagenPersonalBase64    = "";
+}
 
 // ── Paso 6: Tipo de evento ───────────────────────────────────
 
@@ -95,6 +103,7 @@ function quitarImagenEvento(event) {
   preview.classList.add("hidden");
   placeholder.classList.remove("hidden");
   btnQuitar.classList.add("hidden");
+  btnQuitar.style.display = "none";
   if (inputFile) inputFile.value = "";
   if (campoNombre) campoNombre.classList.add("hidden");
 
@@ -151,7 +160,7 @@ function guardarEvento6() {
   return true;
 }
 
-// ── Paso 7: Fecha
+// ── Paso 7: Fecha ────────────────────────────────────────────
 
 const inputFecha        = document.querySelector("#paso-7 input[type='date']");
 const contenedorFechas  = document.getElementById("fechas-sugeridas"); // puede ser null si no existe en el HTML
@@ -169,7 +178,7 @@ function generarFechasSugeridas() {
     d.setDate(hoy.getDate() + i);
     const dia = d.getDay();
 
-    if (dia === 5 || dia === 6 || dia === 0) { 
+    if (dia === 5 || dia === 6 || dia === 0) { // vie, sab, dom
       const label = d.toLocaleDateString("es-MX", {
         weekday: "long", day: "numeric", month: "long", year: "numeric"
       });
@@ -221,7 +230,7 @@ function guardarFecha() {
   return true;
 }
 
-// ── Paso 8: Presupuesto 
+// ── Paso 8: Presupuesto ──────────────────────────────────────
 
 const botonesPresupuesto       = document.querySelectorAll(".presupuesto-btn");
 const inputPresupuestoPersonal = document.getElementById("presupuestoPersonalizado");

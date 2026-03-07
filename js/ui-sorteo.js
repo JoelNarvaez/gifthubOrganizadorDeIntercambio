@@ -18,6 +18,11 @@ function animarSorteo(resultado) {
   cajaAbierta.classList.add("hidden");
   ganadorInfo.textContent     = "¡Los nombres están entrando a la caja!";
 
+  //ANA AGREGA ESTO
+  // Limpiar resultados previos si los hay
+  const resultadosPrev = document.getElementById("resultados-sorteo");
+  if (resultadosPrev) resultadosPrev.innerHTML = ""; //ANA AGREGA ESTO HASTA AQUÍ
+
   // ── Fase 1: Nombres cayendo hacia la caja 
   participantes.forEach((nombre, index) => {
     const div       = document.createElement("div");
@@ -52,15 +57,18 @@ function animarSorteo(resultado) {
   }, tiempoCaida + 1200);
 }
 
+
+
 // ── Mostrar tabla de resultados 
+/*
 function mostrarResultados(resultado) {
   ganadorInfo.textContent = "¡El sorteo está listo!";
 
-  // Limpiar contenedor
+  // Limpiar contenedor*/
   sorteoContenedor.innerHTML = "";
 
-  // Crear tabla de resultados
-  const tabla = document.createElement("div");
+  // Crear tabla de resultados */
+  /*const tabla = document.createElement("div");
   tabla.className = "mt-4 w-full";
 
   Object.entries(resultado).forEach(([dador, receptor]) => {
@@ -75,7 +83,39 @@ function mostrarResultados(resultado) {
   });
 
   sorteoContenedor.appendChild(tabla);
-}
+}*/
+
+ //ANA AGREGA ESTO
+/* AQUÍ ESTOY AGREGANDO COSAS NUEVAS*/
+function mostrarResultados(resultado) {
+  ganadorInfo.textContent = "¡El sorteo está listo!";
+
+  // Limpiar contenedor de animación
+  sorteoContenedor.innerHTML = "";
+
+  // Buscar o crear el contenedor de resultados FUERA de la caja
+  let tablaContenedor = document.getElementById("resultados-sorteo");
+  if (!tablaContenedor) {
+    tablaContenedor = document.createElement("div");
+    tablaContenedor.id = "resultados-sorteo";
+    // Insertar después del div #sorteo-container
+    const cajaWrapper = document.getElementById("sorteo-container");
+    cajaWrapper.insertAdjacentElement("afterend", tablaContenedor);
+  }
+  tablaContenedor.innerHTML = "";
+  tablaContenedor.className = "w-full max-w-sm mx-auto mt-4";
+
+  Object.entries(resultado).forEach(([dador, receptor]) => {
+    const fila = document.createElement("div");
+    fila.className = "flex items-center justify-between bg-white rounded-xl px-4 py-2 mb-2 shadow text-sm";
+    fila.innerHTML = `
+      <span class="font-semibold text-gray-700">${dador}</span>
+      <span class="text-pink-400 text-lg">🎁</span>
+      <span class="font-semibold text-pink-600">${receptor}</span>
+    `;
+    tablaContenedor.appendChild(fila);
+  });
+}  //ANA TERMINA DE AGREGAR AQUÍ
 
 // ── Confeti
 function lanzarConfeti() {

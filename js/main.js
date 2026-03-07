@@ -198,7 +198,7 @@ function mostrarResumen() {
 
   document.getElementById("paso-10").innerHTML = `
   
-  <div class="w-full max-w-2xl mx-auto flex flex-col gap-5 max-h-[520px] overflow-y-auto">
+  <div class="w-full max-w-2xl mx-auto flex flex-col gap-5 max-h-[60vh] overflow-y-auto pr-1">
 
     <!-- Header evento -->
     <div class="relative p-5 rounded-2xl bg-gradient-to-r from-pink-500 to-pink-300 text-white shadow-md">
@@ -513,7 +513,8 @@ function limpiarCamposDom() {
   const inputNuevo       = get("nuevo-participante");
   const listaPartic      = get("lista-participantes");
   const elEventoPersonal = get("eventoPersonalizado");
-  const elFecha          = get("input-fecha");
+  //const elFecha          = get("input-fecha");
+  const elFecha = document.querySelector("#paso-7 input[type='date']"); //ANA AGREGA ESTO
   const elPresupuesto    = get("presupuestoPersonalizado");
   const campoNombre      = get("campo-nombre-custom");
   const previewCustom    = get("preview-custom-seleccionado");
@@ -547,6 +548,14 @@ function limpiarCamposDom() {
 
   document.querySelectorAll(".evento-btn, .presupuesto-btn, .fecha-sugerida-btn")
           .forEach(b => b.classList.remove("seleccionado"));
+
+  // ANA AGREGA ESTO
+  const inputOrg = document.getElementById("nombre-organizador");
+  if (inputOrg) {
+    inputOrg.value = "";
+    inputOrg.dispatchEvent(new Event("input"));
+  }
+  if (typeof actualizarOrganizador === "function") actualizarOrganizador(); // ANA TERMINA DE AGREGAR AQUÍ
 }
 
 // ── Nuevo evento (siempre limpio) ────────────────────────────

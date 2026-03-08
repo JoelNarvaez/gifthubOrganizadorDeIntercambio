@@ -1,5 +1,5 @@
 
-const CLAVE = "cadeau-eventos"; // guarda un array de eventos
+const CLAVE = "cadeau-eventos"; 
 
 // ── Leer todos los eventos ───────────────────────────────────
 function leerEventos() {
@@ -29,7 +29,7 @@ function eliminarEvento(id) {
 // ── Crear un evento nuevo vacío y devolver su id ─────────────
 function crearEvento() {
   const lista = leerEventos();
-  const nuevoId = Date.now(); // id único basado en timestamp
+  const nuevoId = Date.now(); 
   const nuevo = {
     id: nuevoId,
     organizador: "",
@@ -46,7 +46,6 @@ function crearEvento() {
 }
 
 // ── Leer un campo de un evento específico ───────────────────
-// Ejemplo: leerCampo(id, "participantes") → ["Ana", "Luis"]
 function leerCampo(id, campo) {
   const evento = leerEventoPorId(id);
   return evento ? evento[campo] : null;
@@ -57,8 +56,7 @@ function limpiarTodo() {
   localStorage.removeItem(CLAVE);
 }
 
-// ── Id del evento activo (el que se está configurando ahora) ─
-// Se guarda por separado para saber en qué evento estamos
+// ── Id del evento activo (el que se esta configurando ahora) ─
 const CLAVE_ACTIVO = "cadeau-activo";
 
 function guardarEventoActivo(id) {
